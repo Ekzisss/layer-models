@@ -1,0 +1,83 @@
+@import "./vars.module.scss";
+
+.bg {
+  // position: absolute;
+  min-width: 100vw;
+  min-height: 100vh;
+  background: url("/bg.jpg") center 500% / 100% 100% no-repeat;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.main {
+  display: flex;
+  min-height: 100vh;
+  width: 106vw;
+  position: relative;
+  left: -3vh;
+  // overflow: hidden;
+
+  &_decoration {
+    -webkit-transform: skew(-3deg, 0deg);
+    -moz-transform: skew(-3deg, 0deg);
+    -o-transform: skew(-3deg, 0deg);
+    transform: skew(-3deg, 0deg);
+  }
+}
+
+.leftSide {
+  min-height: 100vh;
+  width: 40%;
+
+  display: flex;
+  flex-direction: column;
+
+  // position: absolute;
+  // left: -40px;
+  // top: 0;
+
+  &__up {
+    height: 95vh;
+    background-color: $background;
+    opacity: 0.8;
+  }
+
+  &__down {
+    height: 5vh;
+    background-color: $text;
+    opacity: 0.4;
+  }
+}
+
+.rightSide {
+  min-height: 100vh;
+  width: 60%;
+
+  display: flex;
+  flex-direction: column;
+
+  // position: absolute;
+  // right: -40px;
+  // top: 0;
+
+  &__up {
+    background-color: $background;
+    height: 5vh;
+
+    opacity: 0.6;
+  }
+
+  &__down {
+    background-color: $text;
+    height: 95vh;
+
+    opacity: 0.2;
+  }
+}
+
+@media (max-width: "1350px") {
+  .main {
+    // background: url("/bg2.jpg") center 100% no-repeat;
+  }
+}
