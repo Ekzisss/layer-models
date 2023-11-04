@@ -1,0 +1,40 @@
+[
+  {
+    "sectionName": "Основные",
+    "params": [
+      { "name": "number of models", "desc": "", "type": 0, "default": 10 },
+      { "name": "multiprocess", "desc": "", "type": 1, "default": "False" },
+      { "name": "withoutShift", "desc": "", "type": 1, "default": "False" }
+    ]
+  },
+  {
+    "sectionName": "Генерация базы",
+    "params": [
+      { "name": "number of rows", "desc": "", "type": 4, "default": 30 },
+      { "name": "number of columns", "desc": "", "type": 4, "default": 60 },
+      { "name": "number of layers", "desc": "", "type": 4, "default": 3 },
+      { "name": "layerThickness", "desc": "", "type": 2, "default": [10, 30, 1000000] },
+      { "name": "scatterMaxValue", "desc": "", "type": 4, "default": 5 },
+      { "name": "scatterPeriod", "desc": "", "type": 4, "default": 2 },
+      { "name": "smoothness", "desc": "", "type": 1, "default": "False" },
+      { "name": "scatterAmount", "desc": "", "type": 2, "default": [] },
+      { "name": "sole", "desc": "", "type": 3, "default": [] }
+    ]
+  },
+  {
+    "sectionName": "Генерация разреза",
+    "params": [
+      {
+        "name": "center of geological fault",
+        "desc": "column number of center geological fault",
+        "type": 4,
+        "default": 0
+      },
+      { "name": "angle of geological fault", "desc": "", "type": 4, "default": 0 },
+      { "name": "shiftForce", "desc": "", "type": 4, "default": 10 },
+      { "name": "side", "desc": "", "type": 5, "default": 0 },
+      { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
+      { "name": "shiftCount", "desc": "", "type": 4, "default": 1 }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+@import "../../app/vars.module.scss";
+
+.params__section {
+  margin-top: 15px;
+  border-left: 2px solid $primary;
+  padding-inline: 10px;
+  // padding-top: 8px;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
