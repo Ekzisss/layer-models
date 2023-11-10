@@ -8,7 +8,65 @@
   font-size: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   margin-bottom: 20px;
   font-size: 1.5rem;
+  margin-right: 50px;
+  position: relative;
+
+  li {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    // grid-template-columns: 250px 10000px;
+
+    label {
+      width: 200px;
+    }
+  }
+}
+
+.input_text {
+  position: relative;
+  width: 100px;
+  margin-inline: auto;
+  display: block;
+  height: 100%;
+}
+
+.input_range {
+  flex-grow: 1;
+  min-width: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.input_array {
+  gap: 5px;
+  display: flex;
+  margin: auto;
+  min-width: 0px;
+  // width: 60px;
+
+  &::before {
+    content: "[";
+  }
+
+  &::after {
+    content: "]";
+  }
+
+  input {
+    width: 20px;
+    display: block;
+  }
+
+  div {
+    display: flex;
+    gap: 2px;
+  }
+}
+
+.input_choice {
+  margin: auto;
 }

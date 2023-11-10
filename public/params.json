@@ -25,12 +25,12 @@
     "sectionName": "Генерация разреза",
     "params": [
       {
-        "name": "center of geological fault",
+        "name": "center of slice",
         "desc": "column number of center geological fault",
         "type": 4,
         "default": 0
       },
-      { "name": "angle of geological fault", "desc": "", "type": 4, "default": 0 },
+      { "name": "angle of slice", "desc": "", "type": 4, "default": 0 },
       { "name": "shiftForce", "desc": "", "type": 4, "default": 10 },
       { "name": "side", "desc": "", "type": 5, "default": 0 },
       { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
