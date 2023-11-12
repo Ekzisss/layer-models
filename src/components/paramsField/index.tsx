@@ -17,8 +17,6 @@ interface Types {
   default: any;
 }
 
-const sliderColor = document.documentElement?.style.getPropertyValue('--primary');
-
 export default function ParamsField({
   sectionName,
   params,
