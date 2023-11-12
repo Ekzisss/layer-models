@@ -1,13 +1,18 @@
+'use client';
 import Image from 'next/image';
 import styles from './page.module.scss';
+import './vars.css';
 import { Montserrat } from 'next/font/google';
 import ParamsField from '../components/paramsField';
 import './globals.scss';
 import params from '../../public/params.json';
+import themes from '../../public/themes.json';
+import { useState, useEffect } from 'react';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import PaletteIcon from '@mui/icons-material/Palette';
+import OpacityIcon from '@mui/icons-material/Opacity';
 
 // types
 // 0 - textbox
@@ -18,28 +23,46 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 // 5 - choice
 
 export default function Home() {
-  // const params = [
-  //   {
-  //     sectionName: 'Основные',
-  //     params: [
-  //       { name: 'number of models', desc: '', type: 0, default: 10 },
-  //       { name: 'multiprocess', desc: '', type: 1, default: 'False' },
-  //       { name: 'withoutShift', desc: '', type: 1, default: 'False' },
-  //     ],
-  //   },
-  // ];
+  const [opacityMode, setOpacityMode] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(0);
+  const [colorForSlider, setColorForSlider] = useState('#f81dfd');
+
+  useEffect(() => {
+    const root = document.documentElement;
+    setColorForSlider(themes[currentTheme % themes.length].color);
+
+    root?.style.setProperty('--primary', themes[currentTheme % themes.length].color);
+  }, [currentTheme]);
 
   return (
     <div className={styles.base}>
-      <div className={styles.bg}>
+      <div
+        style={{
+          background: `url(${themes[currentTheme % themes.length].bg}) center/cover no-repeat`,
+          // backgroundSize: 'cover',
+        }}
+        className={styles.bg}
+      >
         <div className={`${styles.main} ${styles.main_decoration}`}>
           <div className={styles.leftSide}>
-            <div className={styles.leftSide__up}></div>
-            <div className={styles.leftSide__down}></div>
+            <div
+              style={opacityMode ? { opacity: 1 } : {}}
+              className={styles.leftSide__up}
+            ></div>
+            <div
+              style={opacityMode ? { opacity: 1 } : {}}
+              className={styles.leftSide__down}
+            ></div>
           </div>
           <div className={styles.rightSide}>
-            <div className={styles.rightSide__up}></div>
-            <div className={styles.rightSide__down}></div>
+            <div
+              style={opacityMode ? { opacity: 1 } : {}}
+              className={styles.rightSide__up}
+            ></div>
+            <div
+              style={opacityMode ? { opacity: 0 } : {}}
+              className={styles.rightSide__down}
+            ></div>
           </div>
         </div>
 
@@ -53,6 +76,7 @@ export default function Home() {
                     key={index}
                     sectionName={item.sectionName}
                     params={item.params}
+                    colorForSlider={colorForSlider}
                   ></ParamsField>
                 ))}
               </section>
@@ -69,12 +93,24 @@ export default function Home() {
                   <span className={styles.languageActive}>ru</span> / <span>en</span>
                 </p>
               </div>
-              <div className={styles.circle}>
-                <DarkModeIcon className={styles.darkMode}></DarkModeIcon>
+              <div
+                onClick={() => setOpacityMode(!opacityMode)}
+                className={styles.circle}
+              >
+                <OpacityIcon className={styles.darkMode}></OpacityIcon>
+              </div>
+              <div
+                onClick={() => setCurrentTheme(currentTheme + 1)}
+                className={styles.circle}
+              >
+                <PaletteIcon className={styles.darkMode}></PaletteIcon>
               </div>
             </div>
             <div className={`${styles.rightSide__down} ${styles.rightSide__down_real}  ${styles.real}`}>
-              <div className={styles.display}>
+              <div
+                style={opacityMode ? { backgroundColor: 'rgba(68, 68, 68, 1)' } : {}}
+                className={styles.display}
+              >
                 <div className={styles.display__mask}></div>
               </div>
             </div>

@@ -4,7 +4,7 @@
   position: relative;
   overflow: hidden;
 
-  color: $text;
+  color: var(--text);
   font-size: 2.5rem;
 }
 
@@ -12,8 +12,7 @@
   // position: absolute;
   min-width: 100vw;
   min-height: 100vh;
-  background: url("/cyber.jpg") center no-repeat;
-  background-size: cover;
+  background: url("/cyber.jpg") center/cover no-repeat;
   top: 0;
   left: 0;
   overflow: hidden;
@@ -49,7 +48,7 @@
 
   &__up {
     height: 95vh;
-    background-color: $background;
+    background-color: var(--background);
     opacity: 0.8;
 
     &_real {
@@ -62,7 +61,7 @@
 
   &__down {
     height: 5vh;
-    background-color: $background;
+    background-color: var(--background);
     opacity: 0.2;
   }
 }
@@ -75,7 +74,7 @@
   flex-direction: column;
 
   &__up {
-    background-color: $background;
+    background-color: var(--background);
     height: 5vh;
 
     opacity: 0.5;
@@ -88,7 +87,7 @@
       padding-block: 5px;
 
       font-size: 2rem;
-      color: $background;
+      color: var(--background);
 
       p {
         background-color: #565656;
@@ -102,7 +101,7 @@
   }
 
   &__down {
-    background-color: $text;
+    background-color: var(--text);
     height: 95vh;
 
     opacity: 0.2;
@@ -127,12 +126,11 @@
   width: 80vh;
   height: 80vh;
   border-radius: 20px;
-  background-color: rgba($color: $background, $alpha: 0.6);
+  background-color: rgba(var(--background--rgb), 0.6);
   opacity: 1;
   border-bottom-right-radius: 0;
 
   position: relative;
-  // z-index: 1;
 
   &::before {
     height: 100%;
@@ -151,16 +149,9 @@
     -webkit-mask-composite: xor;
     mask-composite: subtract;
 
-    // mask-image: linear-gradient(to top, #000, #000), linear-gradient(to top, #000, #000);
-    // mask-size:
-    //   98% 98%,
-    //   100% 100%;
-    // mask-repeat: no-repeat;
-    // mask-composite: subtract;
-
     border-radius: inherit;
     border-bottom-right-radius: 20px;
-    background-color: $primary;
+    background-color: var(--primary);
     opacity: 0.7;
   }
 }
@@ -195,7 +186,7 @@
         left: 50%;
         transform: translateX(-50%) scaleX(3);
         content: "";
-        background-color: $primary;
+        background-color: var(--primary);
 
         border-radius: 4px;
       }
@@ -210,8 +201,8 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: $text;
-  box-shadow: inset 0px 5px 10px rgba($color: $background, $alpha: 0.6);
+  background-color: var(--text);
+  box-shadow: inset 0px 5px 10px rgba(var(--background--rgb), 0.6);
 
   cursor: pointer;
 
@@ -225,11 +216,11 @@
 
   &:hover {
     p {
-      color: $primary;
+      color: var(--primary);
     }
 
     .darkMode {
-      fill: $primary;
+      fill: var(--primary);
     }
   }
 }
@@ -242,9 +233,9 @@
   padding-inline: 10px;
   height: 35px;
   border-radius: 20px;
-  background-color: $text;
+  background-color: var(--text);
 
-  box-shadow: inset 0px 5px 10px rgba($color: $background, $alpha: 0.6);
+  box-shadow: inset 0px 5px 10px rgba(var(--background--rgb), 0.6);
 
   p {
     display: inline;
@@ -265,7 +256,7 @@
 }
 
 .languageActive {
-  color: $primary !important;
+  color: var(--primary) !important;
   position: relative;
 
   &::after {
@@ -276,12 +267,6 @@
     bottom: 2px;
     left: 0;
 
-    background-color: $primary;
+    background-color: var(--primary);
   }
 }
-
-// @media (max-width: "1350px") {
-//   .main {
-//     // background: url("/bg2.jpg") center 100% no-repeat;
-//   }
-// }
