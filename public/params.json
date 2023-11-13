@@ -2,23 +2,22 @@
   {
     "sectionName": "Основные",
     "params": [
-      { "name": "number of models", "desc": "", "type": 0, "default": 10 },
-      { "name": "multiprocess", "desc": "", "type": 1, "default": "False" },
+      { "name": "number of models", "desc": "", "type": 0, "default": 10, "borders": [1, 10000] },
       { "name": "withoutShift", "desc": "", "type": 1, "default": "False" }
     ]
   },
   {
     "sectionName": "Генерация базы",
     "params": [
-      { "name": "NX", "desc": "", "type": 4, "default": 30 },
-      { "name": "NY", "desc": "", "type": 4, "default": 60 },
-      { "name": "number of layers", "desc": "", "type": 3, "default": 3 },
-      { "name": "layerThickness", "desc": "", "type": 2, "default": [10, 30, 1000000] },
-      { "name": "scatterMaxValue", "desc": "", "type": 4, "default": 5 },
-      { "name": "scatterPeriod", "desc": "", "type": 4, "default": 2 },
-      { "name": "smoothness", "desc": "", "type": 1, "default": "False" },
-      { "name": "scatterAmount", "desc": "", "type": 2, "default": [] },
-      { "name": "sole", "desc": "", "type": 3, "default": [] }
+      { "name": "generationType", "desc": "", "type": 6, "default": 0 },
+      { "name": "NX", "desc": "", "type": 4, "default": 30, "borders": [10, 100] },
+      { "name": "NY", "desc": "", "type": 4, "default": 60, "borders": [10, 100] },
+      { "name": "numberOfLayers", "desc": "", "type": 4, "default": 3, "borders": [2, 10] },
+      { "name": "layerThickness", "desc": "", "type": 2, "default": [10, 30, 1000000], "disabled": [2] },
+      { "name": "scatterMaxValue", "desc": "", "type": 4, "default": 5, "disabled": [1, 2] },
+      { "name": "scatterPeriod", "desc": "", "type": 4, "default": 2, "disabled": [1, 2] },
+      { "name": "scatterAmount", "desc": "", "type": 2, "default": [], "disabled": [1, 2] },
+      { "name": "sole", "desc": "", "type": 3, "default": [], "disabled": [0, 1] }
     ]
   },
   {
@@ -30,11 +29,11 @@
         "type": 4,
         "default": 0
       },
-      { "name": "angle", "desc": "", "type": 4, "default": 0 },
-      { "name": "shiftForce", "desc": "", "type": 4, "default": 10 },
+      { "name": "angle", "desc": "", "type": 4, "default": 0, "borders": [-45, 45] },
+      { "name": "shiftForce", "desc": "", "type": 4, "default": 10, "borders": [1, 100] },
       { "name": "side", "desc": "", "type": 5, "default": 0 },
       { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
-      { "name": "shiftCount", "desc": "", "type": 4, "default": 1 }
+      { "name": "shiftCount", "desc": "", "type": 4, "default": 1, "borders": [1, 10] }
     ]
   }
 ]

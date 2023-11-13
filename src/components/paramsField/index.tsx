@@ -15,6 +15,8 @@ interface Types {
   desc: string;
   type: number;
   default: any;
+  borders?: number[];
+  disabled?: number[];
 }
 
 export default function ParamsField({
@@ -28,15 +30,14 @@ export default function ParamsField({
 }) {
   const [mainParams, setMainParams] = React.useState<any>({
     N: 10,
-    multiprocess: false,
     withoutShift: false,
+    generationType: 0,
     NX: 60,
     NY: 30,
     numberOfLayers: 3,
     layerThickness: [10, 30, 1000000],
     scatterMaxValue: 5,
     scatterPeriod: 2,
-    smoothness: false,
     scatterAmount: [],
     sole: [],
     center: 0,
@@ -46,6 +47,8 @@ export default function ParamsField({
     shiftType: 0,
     shiftCount: 1,
   });
+
+  console.log(mainParams.generationType);
 
   const SliderStyle = styled(Slider)({
     color: colorForSlider,
@@ -65,11 +68,6 @@ export default function ParamsField({
       },
     },
   });
-
-  console.log(mainParams);
-
-  const layerCount = 3;
-  const arr = Array.from(Array(layerCount));
 
   function chanheChoice(value: any, name: string) {
     const temp: any = { ...mainParams };
@@ -101,7 +99,7 @@ export default function ParamsField({
           <div className={styles.input_choice}>
             <p>
               <span
-                className={mainParams[name] ? styles.active : ''}
+                className={mainParams[name] ? styles.active : styles.unactive}
                 onClick={() => chanheChoice(true, name)}
               >
                 True
@@ -109,7 +107,7 @@ export default function ParamsField({
               /
               <span
                 onClick={() => chanheChoice(false, name)}
-                className={!mainParams[name] ? styles.active : ''}
+                className={!mainParams[name] ? styles.active : styles.unactive}
               >
                 False
               </span>
@@ -119,14 +117,19 @@ export default function ParamsField({
       case 2:
         return (
           <div className={styles.input_array}>
-            {arr.map((_, index) => (
+            {Array.from(Array(mainParams.numberOfLayers)).map((_, index) => (
               <>
                 <input
                   type="text"
                   name=""
                   id=""
+                  disabled={
+                    params.find((o) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
+                    params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
+                    false
+                  }
                 />
-                {index == arr.length - 1 ? '' : <span>,</span>}
+                {index == Array.from(Array(mainParams.numberOfLayers)).length - 1 ? '' : <span>,</span>}
               </>
             ))}
           </div>
@@ -134,19 +137,29 @@ export default function ParamsField({
       case 3:
         return (
           <div className={styles.input_array}>
-            {arr.map((_, index) => (
+            {Array.from(Array(mainParams.numberOfLayers)).map((_, index) => (
               <div key={`${name} ${index}`}>
                 <input
                   type="text"
                   name=""
                   id=""
+                  disabled={
+                    params.find((o) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
+                    params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
+                    false
+                  }
                 />
                 <input
                   type="text"
                   name=""
                   id=""
+                  disabled={
+                    params.find((o) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
+                    params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
+                    false
+                  }
                 />
-                {index == arr.length - 1 ? '' : <span>,</span>}
+                {index == Array.from(Array(mainParams.numberOfLayers)).length - 1 ? '' : <span>,</span>}
               </div>
             ))}
           </div>
@@ -162,16 +175,26 @@ export default function ParamsField({
                 id=""
                 value={mainParams[name]}
                 onChange={(e) => onChangingParams(e, name)}
+                disabled={
+                  params.find((o) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
+                  params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
+                  false
+                }
               />
             </Item>
             <Item flexGrow="1">
               <SliderStyle
-                defaultValue={30}
+                defaultValue={params.find((o) => o.name === name)?.default || 0}
                 valueLabelDisplay="off"
-                min={20}
-                max={45}
+                min={params.find((o) => o.name === name)?.borders?.at(0) || 20}
+                max={params.find((o) => o.name === name)?.borders?.at(1) || 45}
                 value={typeof mainParams[name] === 'number' ? mainParams[name] : 0}
                 onChange={(e) => onChangingParams(e, name)}
+                disabled={
+                  params.find((o) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
+                  params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
+                  false
+                }
               ></SliderStyle>
             </Item>
           </div>
@@ -182,16 +205,43 @@ export default function ParamsField({
             <p>
               <span
                 onClick={() => chanheChoice(0, name)}
-                className={!mainParams[name] ? styles.active : ''}
+                className={!mainParams[name] ? styles.active : styles.unactive}
               >
                 {name == 'side' ? 'left' : 'up'}
               </span>
               /
               <span
                 onClick={() => chanheChoice(1, name)}
-                className={mainParams[name] ? styles.active : ''}
+                className={mainParams[name] ? styles.active : styles.unactive}
               >
                 {name == 'side' ? 'right' : 'down'}
+              </span>
+            </p>
+          </div>
+        );
+      case 6:
+        return (
+          <div className={styles.input_choice}>
+            <p>
+              <span
+                onClick={() => chanheChoice(0, name)}
+                className={mainParams[name] === 0 ? styles.active : styles.unactive}
+              >
+                scatter
+              </span>
+              /
+              <span
+                onClick={() => chanheChoice(1, name)}
+                className={mainParams[name] === 1 ? styles.active : styles.unactive}
+              >
+                smooth
+              </span>
+              /
+              <span
+                onClick={() => chanheChoice(2, name)}
+                className={mainParams[name] === 2 ? styles.active : styles.unactive}
+              >
+                sole
               </span>
             </p>
           </div>
