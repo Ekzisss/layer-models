@@ -27,6 +27,26 @@ export default function Home() {
   const [currentTheme, setCurrentTheme] = useState(0);
   const [colorForSlider, setColorForSlider] = useState('#f81dfd');
 
+  const [mainParams, setMainParams] = useState<any>({
+    N: 10,
+    withoutShift: false,
+    generationType: 0,
+    NX: 60,
+    NY: 30,
+    numberOfLayers: 3,
+    layerThickness: [10, 30, 1000000],
+    scatterMaxValue: 5,
+    scatterPeriod: 2,
+    scatterAmount: [],
+    sole: [],
+    center: 30,
+    angle: 0,
+    shiftForce: 10,
+    side: 0,
+    shiftType: 0,
+    shiftCount: 1,
+  });
+
   useEffect(() => {
     const root = document.documentElement;
     setColorForSlider(themes[currentTheme % themes.length].color);
@@ -39,7 +59,6 @@ export default function Home() {
       <div
         style={{
           background: `url(${themes[currentTheme % themes.length].bg}) center/cover no-repeat`,
-          // backgroundSize: 'cover',
         }}
         className={styles.bg}
       >
@@ -77,6 +96,8 @@ export default function Home() {
                     sectionName={item.sectionName}
                     params={item.params}
                     colorForSlider={colorForSlider}
+                    mainParams={mainParams}
+                    setMainParams={setMainParams}
                   ></ParamsField>
                 ))}
               </section>

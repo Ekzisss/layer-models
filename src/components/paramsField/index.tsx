@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './style.module.scss';
 import { Montserrat } from 'next/font/google';
 import Slider from '@mui/material/Slider';
@@ -9,6 +9,25 @@ import Item from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
+
+let SliderStyle = styled(Slider)({
+  color: '#f81dfd',
+  '& .MuiSlider-thumb': {
+    height: 15,
+    width: 15,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit',
+    },
+    '&:before': {
+      display: 'none',
+    },
+    '&:after': {
+      display: 'none',
+    },
+  },
+});
 
 interface Types {
   name: string;
@@ -23,51 +42,73 @@ export default function ParamsField({
   sectionName,
   params,
   colorForSlider,
+  mainParams,
+  setMainParams,
 }: {
   sectionName: string;
   params: Types[];
   colorForSlider: string;
+  mainParams: any;
+  setMainParams: React.Dispatch<any>;
 }) {
-  const [mainParams, setMainParams] = React.useState<any>({
-    N: 10,
-    withoutShift: false,
-    generationType: 0,
-    NX: 60,
-    NY: 30,
-    numberOfLayers: 3,
-    layerThickness: [10, 30, 1000000],
-    scatterMaxValue: 5,
-    scatterPeriod: 2,
-    scatterAmount: [],
-    sole: [],
-    center: 0,
-    angle: 0,
-    shiftForce: 10,
-    side: 0,
-    shiftType: 0,
-    shiftCount: 1,
-  });
+  const [sliderKey, setSliderKey] = React.useState('aaa');
 
-  console.log(mainParams.generationType);
+  console.log(mainParams);
 
-  const SliderStyle = styled(Slider)({
-    color: colorForSlider,
-    '& .MuiSlider-thumb': {
-      height: 15,
-      width: 15,
-      backgroundColor: '#fff',
-      border: '2px solid currentColor',
-      '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
-        boxShadow: 'inherit',
+  useEffect(() => {
+    setSliderKey((sliderKey) => sliderKey + 'b');
+    SliderStyle = styled(Slider)({
+      color: colorForSlider,
+      '& .MuiSlider-thumb': {
+        height: 15,
+        width: 15,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+          boxShadow: 'inherit',
+        },
+        '&:before': {
+          display: 'none',
+        },
+        '&:after': {
+          display: 'none',
+        },
       },
-      '&:before': {
-        display: 'none',
-      },
-      '&:after': {
-        display: 'none',
-      },
-    },
-  });
+    });
+  }, [colorForSlider]);
+
+  // console.log(mainParams);
+  // for (const [key, value] of Object.entries(mainParams)) {
+  //   console.log(key, value);
+
+  //   const borders = params.find((o) => o.name === key)?.borders;
+  //   if (!borders) {
+  //     return;
+  //   }
+  //   if (value < borders[0]) {
+  //     const temp: any = {};
+  //     temp[key] = value;
+  //     setMainParams({ ...mainParams, ...temp });
+  //   }
+  //   return;
+  // }
+
+  for (const k in mainParams) {
+    const borders = params.find((o) => o.name === k)?.borders;
+    if (!borders) {
+      continue;
+    }
+    if (mainParams[k] < borders[0]) {
+      const temp: any = {};
+      temp[k] = borders[0];
+      setMainParams({ ...mainParams, ...temp });
+    }
+    if (mainParams[k] > borders[1]) {
+      const temp: any = {};
+      temp[k] = borders[1];
+      setMainParams({ ...mainParams, ...temp });
+    }
+  }
 
   function chanheChoice(value: any, name: string) {
     const temp: any = { ...mainParams };
@@ -75,12 +116,13 @@ export default function ParamsField({
     setMainParams(temp);
   }
 
-  function onChangingParams(e: any, name: string) {
+  function onChangingParams(e: any, name: string, ...rest: any[]) {
     const val: number = +e.target.value;
 
-    const temp: any = { ...mainParams };
+    const temp: any = {};
     temp[name] = val;
-    setMainParams(temp);
+
+    setMainParams({ ...mainParams, ...temp });
   }
 
   function typeSwitch(param: Number, name: string) {
@@ -118,7 +160,7 @@ export default function ParamsField({
         return (
           <div className={styles.input_array}>
             {Array.from(Array(mainParams.numberOfLayers)).map((_, index) => (
-              <>
+              <div key={`${name} ${index} 1`}>
                 <input
                   type="text"
                   name=""
@@ -130,7 +172,7 @@ export default function ParamsField({
                   }
                 />
                 {index == Array.from(Array(mainParams.numberOfLayers)).length - 1 ? '' : <span>,</span>}
-              </>
+              </div>
             ))}
           </div>
         );
@@ -167,7 +209,10 @@ export default function ParamsField({
       case 4:
         return (
           <div className={styles.inputSliderContaier}>
-            <Item width={20}>
+            <Item
+              height={'100%'}
+              display={'flex'}
+            >
               <input
                 className={styles.inputWithSlider}
                 type="text"
@@ -186,15 +231,20 @@ export default function ParamsField({
               <SliderStyle
                 defaultValue={params.find((o) => o.name === name)?.default || 0}
                 valueLabelDisplay="off"
-                min={params.find((o) => o.name === name)?.borders?.at(0) || 20}
-                max={params.find((o) => o.name === name)?.borders?.at(1) || 45}
-                value={typeof mainParams[name] === 'number' ? mainParams[name] : 0}
+                min={params.find((o) => o.name === name)?.borders?.at(0) || (name == 'center' && 0) || 20}
+                max={
+                  params.find((o) => o.name === name)?.borders?.at(1) ||
+                  (name == 'center' && mainParams.NX) ||
+                  45
+                }
+                value={mainParams || typeof mainParams[name] === 'number' ? mainParams[name] : 0}
                 onChange={(e) => onChangingParams(e, name)}
                 disabled={
                   params.find((o) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
                   params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
                   false
                 }
+                key={sliderKey}
               ></SliderStyle>
             </Item>
           </div>
