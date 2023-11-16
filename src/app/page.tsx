@@ -54,6 +54,55 @@ export default function Home() {
     root?.style.setProperty('--primary', themes[currentTheme % themes.length].color);
   }, [currentTheme]);
 
+  useEffect(() => {
+    const axios = require('axios').default;
+
+    axios
+      .get('http://127.0.0.1:8000/')
+      .then(function (response: any) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error: any) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+
+    // axios
+    //   .post('http://127.0.0.1:8000/', {
+    //     params: {
+    //       N: 1,
+    //       NX: 30,
+    //       NY: 300,
+    //       layerCount: 4,
+    //       scatterPeriod: 1,
+    //       sole: [
+    //         [50, 74],
+    //         [90, 99],
+    //         [110, 114],
+    //         [1000, 1000],
+    //       ],
+    //       shiftForce: [5, 15],
+    //       side: 1,
+    //       shiftType: 1,
+    //     },
+    //   })
+    //   .then(function (response: any) {
+    //     // handle success
+    //     console.log(response);
+    //   })
+    //   .catch(function (error: any) {
+    //     // handle error
+    //     console.log(error);
+    //   })
+    //   .finally(function () {
+    //     // always executed
+    //   });
+  }, []);
+
   return (
     <div className={styles.base}>
       <div

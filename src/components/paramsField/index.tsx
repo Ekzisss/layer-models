@@ -53,7 +53,7 @@ export default function ParamsField({
 }) {
   const [sliderKey, setSliderKey] = React.useState('aaa');
 
-  console.log(mainParams);
+  // console.log(mainParams);
 
   useEffect(() => {
     setSliderKey((sliderKey) => sliderKey + 'b');
