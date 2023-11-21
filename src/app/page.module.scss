@@ -12,7 +12,7 @@
   // position: absolute;
   min-width: 100vw;
   min-height: 100vh;
-  background: url("/cyber.jpg") center/cover no-repeat;
+  background: url("/bg2.jpg") center/cover no-repeat;
   top: 0;
   left: 0;
   overflow: hidden;
@@ -47,11 +47,12 @@
   flex-direction: column;
 
   &__up {
-    height: 95vh;
+    height: 92vh;
     background-color: var(--background);
     opacity: 0.8;
 
     &_real {
+      opacity: 1;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -60,9 +61,36 @@
   }
 
   &__down {
-    height: 5vh;
+    height: 8vh;
     background-color: var(--background);
     opacity: 0.2;
+
+    &_real {
+      padding-left: 50px;
+      margin-right: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &__submit {
+      background-color: var(--primary);
+
+      -webkit-transform: skew(-6deg, 0deg);
+      -moz-transform: skew(-6deg, 0deg);
+      -o-transform: skew(-6deg, 0deg);
+      transform: skew(-6deg, 0deg);
+
+      padding: 4px 10px;
+
+      transition: 0.1s all linear;
+
+      &:hover {
+        background-color: transparent;
+
+        border: 2px var(--primary) solid;
+      }
+    }
   }
 }
 
@@ -124,13 +152,23 @@
 
 .display {
   width: 80vh;
-  height: 80vh;
+  aspect-ratio: 1;
+  // height: 80vh;
   border-radius: 20px;
   background-color: rgba(var(--background--rgb), 0.6);
   opacity: 1;
   border-bottom-right-radius: 0;
 
   position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 12px;
+  color: white;
+  padding-right: 30px;
+  padding-top: 20px;
 
   &::before {
     height: 100%;

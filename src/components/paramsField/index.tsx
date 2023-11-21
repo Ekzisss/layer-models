@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 let SliderStyle = styled(Slider)({
-  color: '#f81dfd',
+  color: 'rgb(240, 74, 74)',
   '& .MuiSlider-thumb': {
     height: 15,
     width: 15,

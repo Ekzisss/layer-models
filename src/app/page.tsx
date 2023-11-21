@@ -14,6 +14,8 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 import PaletteIcon from '@mui/icons-material/Palette';
 import OpacityIcon from '@mui/icons-material/Opacity';
 
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+
 // types
 // 0 - textbox
 // 1 - checkbox
@@ -23,9 +25,11 @@ import OpacityIcon from '@mui/icons-material/Opacity';
 // 5 - choice
 
 export default function Home() {
+  const axios = require('axios').default;
   const [opacityMode, setOpacityMode] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(0);
-  const [colorForSlider, setColorForSlider] = useState('#f81dfd');
+  const [colorForSlider, setColorForSlider] = useState('rgb(240, 74, 74)');
+  const [dataForChart, setDataForChart] = useState<any>([]);
 
   const [mainParams, setMainParams] = useState<any>({
     N: 10,
@@ -54,42 +58,56 @@ export default function Home() {
     root?.style.setProperty('--primary', themes[currentTheme % themes.length].color);
   }, [currentTheme]);
 
-  useEffect(() => {
-    const axios = require('axios').default;
+  // useEffect(() => {
+  //   axios
+  //     .get('http://127.0.0.1:8000/')
+  //     .then(function (response: any) {
+  //       // handle success
+  //       console.log(response);
+  //     })
+  //     .catch(function (error: any) {
+  //       // handle error
+  //       console.log(error);
+  //     })
+  //     .finally(function () {
+  //       // always executed
+  //     });
 
-    axios
-      .get('http://127.0.0.1:8000/')
-      .then(function (response: any) {
-        // handle success
-        console.log(response);
-      })
-      .catch(function (error: any) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });
+  //   // axios
+  //   //   .post('http://127.0.0.1:8000/', {
+  //   //     params: {
+  //   //       N: 1,
+  //   //       NX: 30,
+  //   //       NY: 300,
+  //   //       layerCount: 4,
+  //   //       scatterPeriod: 1,
+  //   //       sole: [
+  //   //         [50, 74],
+  //   //         [90, 99],
+  //   //         [110, 114],
+  //   //         [1000, 1000],
+  //   //       ],
+  //   //       shiftForce: [5, 15],
+  //   //       side: 1,
+  //   //       shiftType: 1,
+  //   //     },
+  //   //   })
+  //   //   .then(function (response: any) {
+  //   //     // handle success
+  //   //     console.log(response);
+  //   //   })
+  //   //   .catch(function (error: any) {
+  //   //     // handle error
+  //   //     console.log(error);
+  //   //   })
+  //   //   .finally(function () {
+  //   //     // always executed
+  //   //   });
+  // }, []);
 
+  async function updateGraph() {
     // axios
-    //   .post('http://127.0.0.1:8000/', {
-    //     params: {
-    //       N: 1,
-    //       NX: 30,
-    //       NY: 300,
-    //       layerCount: 4,
-    //       scatterPeriod: 1,
-    //       sole: [
-    //         [50, 74],
-    //         [90, 99],
-    //         [110, 114],
-    //         [1000, 1000],
-    //       ],
-    //       shiftForce: [5, 15],
-    //       side: 1,
-    //       shiftType: 1,
-    //     },
-    //   })
+    //   .get('http://127.0.0.1:8000/')
     //   .then(function (response: any) {
     //     // handle success
     //     console.log(response);
@@ -101,7 +119,43 @@ export default function Home() {
     //   .finally(function () {
     //     // always executed
     //   });
-  }, []);
+
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/');
+      const receivedData = response.data.result[0];
+
+      const dataPerLayer = [
+        receivedData.slice(0, -34),
+        receivedData.slice(15, -19),
+        receivedData.slice(30, -4),
+      ];
+
+      const data = dataPerLayer[0].map((item: any) => {
+        return { value0: item };
+      });
+
+      for (let i = 1; i < dataPerLayer.length; i++) {
+        dataPerLayer[i].map((item: any, index: number) => {
+          data[index][`value${i}`] = item;
+          // return { value: item };
+        });
+      }
+
+      console.log(data);
+      setDataForChart(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const data = [
+    { name: 'Page A', uv: 400, pv: 2400, amt: 2400 },
+    { name: 'Page B', uv: 300, pv: 2400, amt: 2400 },
+    { name: 'Page C', uv: 230, pv: 2400, amt: 2400 },
+    { name: 'Page D', uv: 96, pv: 2400, amt: 2400 },
+  ];
+
+  const data2 = [{ nv: 10 }, { nv: 20 }, { nv: 40 }, { nv: -10 }];
 
   return (
     <div className={styles.base}>
@@ -151,7 +205,14 @@ export default function Home() {
                 ))}
               </section>
             </div>
-            <div className={`${styles.leftSide__down} ${styles.real}`}></div>
+            <div className={`${styles.leftSide__down} ${styles.leftSide__down_real} ${styles.real}`}>
+              <button
+                onClick={updateGraph}
+                className={styles.leftSide__down__submit}
+              >
+                Сгенерировать
+              </button>
+            </div>
           </div>
           <div className={styles.rightSide}>
             <div className={`${styles.rightSide__up} ${styles.rightSide__up_real} ${styles.real}`}>
@@ -181,7 +242,39 @@ export default function Home() {
                 style={opacityMode ? { backgroundColor: 'rgba(68, 68, 68, 1)' } : {}}
                 className={styles.display}
               >
-                <div className={styles.display__mask}></div>
+                <ResponsiveContainer
+                  width="100%"
+                  // height="100%"
+                  aspect={1}
+                  debounce={1}
+                >
+                  <AreaChart data={dataForChart}>
+                    <Area
+                      type="monotone"
+                      dataKey="value0"
+                      stroke="red"
+                      fillOpacity={0.2}
+                    ></Area>
+                    <Area
+                      type="monotone"
+                      dataKey="value1"
+                      stroke="red"
+                      fillOpacity={0.2}
+                    ></Area>
+                    <Area
+                      type="monotone"
+                      dataKey="value2"
+                      stroke="red"
+                      fillOpacity={0.2}
+                    ></Area>
+                    {/* <CartesianGrid stroke="#ccc" /> */}
+                    <XAxis
+                      stroke="#ccc"
+                      dataKey="name"
+                    />
+                    <YAxis stroke="#ccc" />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
