@@ -67,8 +67,6 @@ export default function Home() {
       const response = await axios.post('http://127.0.0.1:8000/', mainParams);
       const receivedData = response.data.result[0];
 
-      console.log(receivedData);
-
       const NX = 100;
 
       const dataPerLayer = [
@@ -233,7 +231,7 @@ export default function Home() {
                     />
                     <YAxis
                       stroke="#ccc"
-                      reversed={true}
+                      // reversed={true}
                     />
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                   </AreaChart>

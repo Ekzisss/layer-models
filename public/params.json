@@ -12,10 +12,17 @@
       { "name": "generationType", "desc": "", "type": 6, "default": 0 },
       { "name": "NX", "desc": "", "type": 4, "default": 30, "borders": [10, 100] },
       { "name": "NY", "desc": "", "type": 4, "default": 60, "borders": [10, 100] },
-      { "name": "numberOfLayers", "desc": "", "type": 4, "default": 3, "borders": [2, 10] },
+      { "name": "layerCount", "desc": "", "type": 4, "default": 3, "borders": [2, 10] },
       { "name": "layerThickness", "desc": "", "type": 2, "default": [10, 30, 1000000], "disabled": [2] },
       { "name": "scatterMaxValue", "desc": "", "type": 4, "default": 5, "disabled": [1, 2] },
-      { "name": "scatterPeriod", "desc": "", "type": 4, "default": 2, "disabled": [1, 2] },
+      {
+        "name": "scatterPeriod",
+        "desc": "",
+        "type": 4,
+        "default": 2,
+        "borders": [1, 10],
+        "disabled": [1, 2]
+      },
       { "name": "scatterAmount", "desc": "", "type": 2, "default": [], "disabled": [0, 2] },
       { "name": "sole", "desc": "", "type": 3, "default": [], "disabled": [0, 1] }
     ]
@@ -24,12 +31,12 @@
     "sectionName": "Генерация разреза",
     "params": [
       {
-        "name": "center",
+        "name": "Y",
         "desc": "column number of center geological fault",
         "type": 4,
         "default": 30
       },
-      { "name": "angle", "desc": "", "type": 4, "default": 0, "borders": [-45, 45] },
+      { "name": "L", "desc": "", "type": 4, "default": 0, "borders": [-45, 45] },
       { "name": "shiftForce", "desc": "", "type": 4, "default": 10, "borders": [1, 100] },
       { "name": "side", "desc": "", "type": 5, "default": 0 },
       { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
