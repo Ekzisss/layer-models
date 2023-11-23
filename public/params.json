@@ -13,8 +13,15 @@
       { "name": "NX", "desc": "", "type": 4, "default": 30, "borders": [10, 100] },
       { "name": "NY", "desc": "", "type": 4, "default": 60, "borders": [10, 100] },
       { "name": "layerCount", "desc": "", "type": 4, "default": 3, "borders": [2, 10] },
-      { "name": "layerThickness", "desc": "", "type": 2, "default": [10, 30, 1000000], "disabled": [2] },
-      { "name": "scatterMaxValue", "desc": "", "type": 4, "default": 5, "disabled": [1, 2] },
+      { "name": "layerThickness", "desc": "", "type": 2, "default": [], "disabled": [2] },
+      {
+        "name": "scatterMaxValue",
+        "desc": "",
+        "type": 4,
+        "default": 5,
+        "disabled": [1, 2],
+        "borders": [1, 25]
+      },
       {
         "name": "scatterPeriod",
         "desc": "",
@@ -33,11 +40,11 @@
       {
         "name": "Y",
         "desc": "column number of center geological fault",
-        "type": 4,
-        "default": 30
+        "type": 7,
+        "default": [30, 30]
       },
-      { "name": "L", "desc": "", "type": 4, "default": 0, "borders": [-45, 45] },
-      { "name": "shiftForce", "desc": "", "type": 4, "default": 10, "borders": [1, 100] },
+      { "name": "L", "desc": "", "type": 7, "default": [-10, 10] },
+      { "name": "shiftForce", "desc": "", "type": 7, "default": [5, 15], "borders2": [1, 100] },
       { "name": "side", "desc": "", "type": 5, "default": 0 },
       { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
       { "name": "shiftCount", "desc": "", "type": 4, "default": 1, "borders": [1, 10] }

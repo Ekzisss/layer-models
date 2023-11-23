@@ -23,6 +23,8 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tool
 // 3 - array of array1
 // 4 - slider
 // 5 - choice
+// 6 - 3 choice
+// 7 - 2 sliders
 
 export default function Home() {
   const axios = require('axios').default;
@@ -38,14 +40,14 @@ export default function Home() {
     NX: 60,
     NY: 30,
     layerCount: 3,
-    layerThickness: [10, 30, 1000000],
+    layerThickness: [],
     scatterMaxValue: 5,
     scatterPeriod: 2,
     scatterAmount: [],
     sole: [],
-    Y: 30,
-    L: 0,
-    shiftForce: 10,
+    Y: [30, 30],
+    L: [-10, 10],
+    shiftForce: [5, 15],
     side: 0,
     shiftType: 0,
     shiftCount: 1,
@@ -72,9 +74,9 @@ export default function Home() {
       const NX = 100;
 
       const dataPerLayer = [
-        receivedData.slice(0, -NX * 2 - 4),
-        receivedData.slice(NX, -NX - 4),
-        receivedData.slice(NX * 2, -4),
+        receivedData.slice(0, -mainParams.NX * 2 - 4),
+        receivedData.slice(mainParams.NX, -mainParams.NX - 4),
+        receivedData.slice(mainParams.NX * 2, -4),
       ];
 
       console.log(dataPerLayer);
@@ -221,7 +223,6 @@ export default function Home() {
                     ></Area>
                     <Area
                       dataKey="layer 2"
-                      fill="red"
                       stroke="#ffc658"
                       fill="#ffc658"
                       stackId="1"

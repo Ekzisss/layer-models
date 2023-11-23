@@ -53,7 +53,7 @@ export default function ParamsField({
 }) {
   const [sliderKey, setSliderKey] = React.useState('aaa');
 
-  // console.log(mainParams);
+  console.log(mainParams);
 
   useEffect(() => {
     setSliderKey((sliderKey) => sliderKey + 'b');
@@ -77,50 +77,114 @@ export default function ParamsField({
     });
   }, [colorForSlider]);
 
-  // console.log(mainParams);
-  // for (const [key, value] of Object.entries(mainParams)) {
-  //   console.log(key, value);
-
-  //   const borders = params.find((o) => o.name === key)?.borders;
-  //   if (!borders) {
-  //     return;
-  //   }
-  //   if (value < borders[0]) {
-  //     const temp: any = {};
-  //     temp[key] = value;
-  //     setMainParams({ ...mainParams, ...temp });
-  //   }
-  //   return;
-  // }
-
-  for (const k in mainParams) {
-    const borders = params.find((o) => o.name === k)?.borders;
+  for (const item in mainParams) {
+    const borders = params.find((o) => o.name === item)?.borders;
     if (!borders) {
+      getUpdatingBorders(item);
       continue;
     }
-    if (mainParams[k] < borders[0]) {
+    if (mainParams[item] < borders[0]) {
       const temp: any = {};
-      temp[k] = borders[0];
+      temp[item] = borders[0];
       setMainParams({ ...mainParams, ...temp });
     }
-    if (mainParams[k] > borders[1]) {
+    if (mainParams[item] > borders[1]) {
       const temp: any = {};
-      temp[k] = borders[1];
+      temp[item] = borders[1];
       setMainParams({ ...mainParams, ...temp });
     }
   }
 
-  function chanheChoice(value: any, name: string) {
+  function getUpdatingBorders(name: string) {
+    if (name === 'L') {
+      if (
+        (mainParams.side === 0 && mainParams.shiftType === 1) ||
+        (mainParams.side === 1 && mainParams.shiftType === 0)
+      ) {
+        if (mainParams[name][0] < 1) {
+          mainParams[name][0] = 1;
+        }
+        if (mainParams[name][1] > 45) {
+          mainParams[name][1] = 45;
+        }
+        if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < 1) {
+          mainParams[name][1] = mainParams[name][0];
+        }
+        if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > 45) {
+          mainParams[name][0] = mainParams[name][1];
+        }
+      } else {
+        if (mainParams[name][0] < -45) {
+          mainParams[name][0] = -45;
+        }
+        if (mainParams[name][1] > -1) {
+          mainParams[name][1] = -1;
+        }
+        if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < -45) {
+          mainParams[name][1] = mainParams[name][0];
+        }
+        if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > -1) {
+          mainParams[name][0] = mainParams[name][1];
+        }
+      }
+    }
+    if (name === 'Y') {
+      if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < 1) {
+        mainParams[name][1] = mainParams[name][0];
+      }
+      if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > mainParams.NX) {
+        mainParams[name][0] = mainParams[name][1];
+      }
+
+      if (mainParams[name][1] > mainParams.NX) {
+        mainParams[name][1] = mainParams.NX;
+      }
+      if (mainParams[name][0] < 1) {
+        mainParams[name][0] = 1;
+      }
+    }
+
+    if (name === 'shiftForce') {
+      if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < 1) {
+        mainParams[name][1] = mainParams[name][0];
+      }
+      if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > mainParams.NY) {
+        mainParams[name][0] = mainParams[name][1];
+      }
+
+      if (mainParams[name][1] > mainParams.NY) {
+        mainParams[name][1] = mainParams.NY;
+      }
+      if (mainParams[name][0] < 1) {
+        mainParams[name][0] = 1;
+      }
+    }
+  }
+
+  function changeChoice(value: any, name: string) {
     const temp: any = { ...mainParams };
     temp[name] = value;
     setMainParams(temp);
   }
 
-  function onChangingParams(e: any, name: string, ...rest: any[]) {
+  function onChangingParams(e: any, name: string, valueNumber: number = 0) {
+    if (Number.isNaN(+e.target.value)) {
+      return;
+    }
+
     const val: number = +e.target.value;
 
     const temp: any = {};
-    temp[name] = val;
+
+    if (params.find((o) => o.name === name)?.type === 7) {
+      if (valueNumber === 1) {
+        temp[name] = [mainParams[name][0], val];
+      } else {
+        temp[name] = [val, mainParams[name][1]];
+      }
+    } else {
+      temp[name] = val;
+    }
 
     setMainParams({ ...mainParams, ...temp });
   }
@@ -134,6 +198,8 @@ export default function ParamsField({
             type="text"
             name=""
             id=""
+            value={mainParams.N}
+            onChange={(e) => onChangingParams(e, name)}
           />
         );
       case 1:
@@ -141,15 +207,15 @@ export default function ParamsField({
           <div className={styles.input_choice}>
             <p>
               <span
-                className={mainParams[name] ? styles.active : styles.unactive}
-                onClick={() => chanheChoice(true, name)}
+                className={mainParams[name] ? styles.active : styles.inactive}
+                onClick={() => changeChoice(true, name)}
               >
                 True
               </span>
               /
               <span
-                onClick={() => chanheChoice(false, name)}
-                className={!mainParams[name] ? styles.active : styles.unactive}
+                onClick={() => changeChoice(false, name)}
+                className={!mainParams[name] ? styles.active : styles.inactive}
               >
                 False
               </span>
@@ -208,7 +274,7 @@ export default function ParamsField({
         );
       case 4:
         return (
-          <div className={styles.inputSliderContaier}>
+          <div className={styles.inputSliderContainer}>
             <Item
               height={'100%'}
               display={'flex'}
@@ -254,15 +320,15 @@ export default function ParamsField({
           <div className={styles.input_choice}>
             <p>
               <span
-                onClick={() => chanheChoice(0, name)}
-                className={!mainParams[name] ? styles.active : styles.unactive}
+                onClick={() => changeChoice(0, name)}
+                className={!mainParams[name] ? styles.active : styles.inactive}
               >
                 {name == 'side' ? 'left' : 'up'}
               </span>
               /
               <span
-                onClick={() => chanheChoice(1, name)}
-                className={mainParams[name] ? styles.active : styles.unactive}
+                onClick={() => changeChoice(1, name)}
+                className={mainParams[name] ? styles.active : styles.inactive}
               >
                 {name == 'side' ? 'right' : 'down'}
               </span>
@@ -274,26 +340,102 @@ export default function ParamsField({
           <div className={styles.input_choice}>
             <p>
               <span
-                onClick={() => chanheChoice(0, name)}
-                className={mainParams[name] === 0 ? styles.active : styles.unactive}
+                onClick={() => changeChoice(0, name)}
+                className={mainParams[name] === 0 ? styles.active : styles.inactive}
               >
                 scatter
               </span>
               /
               <span
-                onClick={() => chanheChoice(1, name)}
-                className={mainParams[name] === 1 ? styles.active : styles.unactive}
+                onClick={() => changeChoice(1, name)}
+                className={mainParams[name] === 1 ? styles.active : styles.inactive}
               >
                 smooth
               </span>
               /
               <span
-                onClick={() => chanheChoice(2, name)}
-                className={mainParams[name] === 2 ? styles.active : styles.unactive}
+                onClick={() => changeChoice(2, name)}
+                className={mainParams[name] === 2 ? styles.active : styles.inactive}
               >
                 sole
               </span>
             </p>
+          </div>
+        );
+      case 7:
+        return (
+          <div className={styles.inputSliderContainer}>
+            <Item flexGrow="1">
+              <SliderStyle
+                defaultValue={params.find((o) => o.name === name)?.default[0] || 0}
+                valueLabelDisplay="off"
+                min={
+                  (name === 'shiftForce' && 1) ||
+                  (name === 'Y' && 1) ||
+                  (name === 'L' &&
+                    ((mainParams.side === 0 && mainParams.shiftType === 1) ||
+                      (mainParams.side === 1 && mainParams.shiftType === 0)) &&
+                    1) ||
+                  -45
+                }
+                max={mainParams[name][1] || 45}
+                value={mainParams || typeof mainParams[name][0] === 'number' ? mainParams[name][0] : 0}
+                onChange={(e) => onChangingParams(e, name, 0)}
+                key={sliderKey}
+              ></SliderStyle>
+            </Item>
+            <Item
+              display={'flex'}
+              flexDirection={'row'}
+              gap={'3px'}
+            >
+              <Item
+                height={'100%'}
+                display={'flex'}
+              >
+                <input
+                  className={styles.inputWithSlider}
+                  type="text"
+                  name=""
+                  value={mainParams[name][0]}
+                  onChange={(e) => onChangingParams(e, name, 0)}
+                />
+              </Item>
+              -
+              <Item
+                height={'100%'}
+                display={'flex'}
+              >
+                <input
+                  className={styles.inputWithSlider}
+                  type="text"
+                  name=""
+                  id="1"
+                  value={mainParams[name][1]}
+                  onChange={(e) => onChangingParams(e, name, 1)}
+                />
+              </Item>
+            </Item>
+
+            <Item flexGrow="1">
+              <SliderStyle
+                defaultValue={params.find((o) => o.name === name)?.default[1] || 0}
+                valueLabelDisplay="off"
+                min={mainParams[name][0] || -45}
+                max={
+                  (name === 'shiftForce' && mainParams.NY) ||
+                  (name === 'Y' && mainParams.NX) ||
+                  (name === 'L' &&
+                    ((mainParams.side === 0 && mainParams.shiftType === 1) ||
+                      (mainParams.side === 1 && mainParams.shiftType === 0)) &&
+                    45) ||
+                  -1
+                }
+                value={mainParams || typeof mainParams[name][1] === 'number' ? mainParams[name][1] : 0}
+                onChange={(e) => onChangingParams(e, name, 1)}
+                key={sliderKey}
+              ></SliderStyle>
+            </Item>
           </div>
         );
       default:
@@ -318,7 +460,7 @@ export default function ParamsField({
             alignItems="center"
             key={`${item.name} ${index}`}
           >
-            <Item width="200px">{item.name}</Item>
+            <Item width="160px">{item.name}</Item>
             <div>-</div>
             {typeSwitch(item.type, item.name)}
           </Stack>
