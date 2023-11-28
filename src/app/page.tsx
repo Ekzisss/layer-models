@@ -14,7 +14,7 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 import PaletteIcon from '@mui/icons-material/Palette';
 import OpacityIcon from '@mui/icons-material/Opacity';
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 // types
 // 0 - textbox
@@ -26,12 +26,62 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tool
 // 6 - 3 choice
 // 7 - 2 sliders
 
+// const chartColor = [
+//   '#fd7f6f',
+//   '#7eb0d5',
+//   '#b2e061',
+//   '#bd7ebe',
+//   '#ffb55a',
+//   '#ffee65',
+//   '#beb9db',
+//   '#fdcce5',
+//   '#8bd3c7',
+//   '#8884d8',
+// ];
+
+const gradient = [
+  '#fde725',
+  '#b5de2b',
+  '#6ece58',
+  '#35b779',
+  '#1f9e89',
+  '#26828e',
+  '#31688e',
+  '#3e4989',
+  '#482878',
+  '#440154',
+];
+
+function colorPicker(palette: string[], totalNumber: number) {
+  const result: string[] = [];
+  const modifier = 9 / (totalNumber - 1);
+  for (let i = 0; i < totalNumber; i++) {
+    console.log(i * modifier);
+
+    result.push(palette[Math.round(i * modifier)]);
+  }
+  return result;
+}
+// console.log(colorPicker(gradient, 9));
+
 export default function Home() {
   const axios = require('axios').default;
   const [opacityMode, setOpacityMode] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(0);
   const [colorForSlider, setColorForSlider] = useState('rgb(240, 74, 74)');
   const [dataForChart, setDataForChart] = useState<any>([]);
+  const [chartColors, setChartColors] = useState([
+    '#fde725',
+    '#b5de2b',
+    '#6ece58',
+    '#35b779',
+    '#1f9e89',
+    '#26828e',
+    '#31688e',
+    '#3e4989',
+    '#482878',
+    '#440154',
+  ]);
 
   const [mainParams, setMainParams] = useState<any>({
     N: 10,
@@ -53,9 +103,7 @@ export default function Home() {
     shiftCount: 1,
   });
 
-  // N = 1, NY=60, NX=120, layerCount = None, layerThickness=[], layerValues=[],
-  //                 scatterMaxValue=5, scatterPeriod=5, smoothness=False, Y=None, L=None, shiftForce=None,
-  //                 side = None, shiftType = None, shiftCount = 1, multiprocess=False, scatterAmount = [], sole=None, withoutShift=False
+  // const chartColor = colorPicker(gradient, mainParams.layerCount);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -71,13 +119,14 @@ export default function Home() {
 
       console.log(receivedData);
 
-      const NX = 100;
+      const dataPerLayer: any[] = [];
 
-      const dataPerLayer = [
-        receivedData.slice(0, -mainParams.NX * 2 - 4),
-        receivedData.slice(mainParams.NX, -mainParams.NX - 4),
-        receivedData.slice(mainParams.NX * 2, -4),
-      ];
+      for (let i = 0; i < mainParams.layerCount; i++) {
+        dataPerLayer.push(
+          receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - 4)
+        );
+        console.log(i);
+      }
 
       console.log(dataPerLayer);
 
@@ -95,6 +144,13 @@ export default function Home() {
       console.log(data);
       console.log(getAllValues(dataPerLayer, 0, 1));
 
+      // const chartColor = colorPicker(gradient, mainParams.layerCount);
+      setChartColors(colorPicker(gradient, mainParams.layerCount));
+
+      Object.keys(data[0]).map((key, index) => {
+        console.log(key, index);
+      });
+
       setDataForChart(data);
     } catch (error) {
       console.log(error);
@@ -108,15 +164,6 @@ export default function Home() {
     }
     return sum;
   }
-
-  const data = [
-    { name: 'Page A', uv: 400, pv: 2400, amt: 2400 },
-    { name: 'Page B', uv: 300, pv: 2400, amt: 2400 },
-    { name: 'Page C', uv: 230, pv: 2400, amt: 2400 },
-    { name: 'Page D', uv: 96, pv: 2400, amt: 2400 },
-  ];
-
-  const data2 = [{ nv: 10 }, { nv: 20 }, { nv: 40 }, { nv: -10 }];
 
   return (
     <div className={styles.base}>
@@ -207,9 +254,23 @@ export default function Home() {
                   width="100%"
                   aspect={1}
                 >
-                  <AreaChart data={dataForChart}>
+                  <AreaChart
+                    // height={1250}
+                    data={dataForChart}
+                    margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
+                  >
                     <Tooltip />
-                    <Area
+                    {dataForChart[0] &&
+                      Object.keys(dataForChart[0]).map((key, index) => (
+                        <Area
+                          key={index}
+                          dataKey={key}
+                          stroke={chartColors[index]}
+                          fill={chartColors[index]}
+                          stackId="1"
+                        ></Area>
+                      ))}
+                    {/* <Area
                       dataKey="layer 0"
                       stroke="#8884d8"
                       fill="#8884d8"
@@ -226,14 +287,16 @@ export default function Home() {
                       stroke="#ffc658"
                       fill="#ffc658"
                       stackId="1"
-                    ></Area>
+                    ></Area> */}
                     {/* <CartesianGrid stroke="#ccc" /> */}
                     <XAxis
                       stroke="#ccc"
-                      dataKey="name"
+                      // dataKey="name"
+                      orientation="top"
                     />
                     <YAxis
                       stroke="#ccc"
+                      markerHeight={20}
                       reversed={true}
                     />
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}

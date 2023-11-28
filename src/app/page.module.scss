@@ -1,4 +1,4 @@
-@import './vars.module.scss';
+@import "./vars.module.scss";
 
 .base {
   position: relative;
@@ -12,7 +12,7 @@
   // position: absolute;
   min-width: 100vw;
   min-height: 100vh;
-  background: url('/bg2.jpg') center/cover no-repeat;
+  background: url("/bg2.jpg") center/cover no-repeat;
   top: 0;
   left: 0;
   overflow: hidden;
@@ -165,7 +165,7 @@
   justify-content: center;
   align-items: center;
 
-  font-size: 12px;
+  font-size: 16px;
   color: white;
   padding-right: 30px;
   padding-top: 20px;
@@ -176,11 +176,13 @@
     position: absolute;
     top: 2%;
     left: 2%;
-    content: '';
+    content: "";
     z-index: -1;
 
     mask-image: linear-gradient(to top, #000, #000), linear-gradient(to top, #000, #000);
-    mask-size: 100% 100%, 98% 98%;
+    mask-size:
+      100% 100%,
+      98% 98%;
     mask-repeat: no-repeat;
     -webkit-mask-composite: xor;
     mask-composite: subtract;
@@ -221,7 +223,7 @@
         bottom: -12px;
         left: 50%;
         transform: translateX(-50%) scaleX(3);
-        content: '';
+        content: "";
         background-color: var(--primary);
 
         border-radius: 4px;
@@ -298,7 +300,7 @@
   &::after {
     width: 100%;
     height: 2px;
-    content: '';
+    content: "";
     position: absolute;
     bottom: 2px;
     left: 0;

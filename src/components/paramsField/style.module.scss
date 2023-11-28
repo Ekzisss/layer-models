@@ -51,10 +51,14 @@
   display: flex;
   margin: auto;
   min-width: 0px;
-  // width: 60px;
+  flex-wrap: wrap;
+  position: relative;
 
   &::before {
     content: "[";
+    position: absolute;
+    top: 0;
+    left: -12px;
   }
 
   &::after {
@@ -101,17 +105,22 @@
 
 .inputWithSlider {
   text-align: center;
-  background-color: var(--text);
+  background-color: rgb(240, 240, 240);
   color: var(--background);
 
   width: 30px;
   height: 20px;
+
+  &:disabled {
+    background-color: rgba(239, 239, 239, 0.3);
+  }
 }
 
 .active {
   color: var(--primary);
 
   // #f988ff
+  // color: rgb(0.9,0.9,0.9)
 }
 
 .inactive {

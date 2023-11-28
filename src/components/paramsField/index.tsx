@@ -167,7 +167,12 @@ export default function ParamsField({
     setMainParams(temp);
   }
 
-  function onChangingParams(e: any, name: string, valueNumber: number = 0) {
+  function onChangingParams(
+    e: any,
+    name: string,
+    valueNumber: number = 0,
+    soleNumber: number | undefined = undefined
+  ) {
     if (Number.isNaN(+e.target.value)) {
       return;
     }
@@ -176,12 +181,28 @@ export default function ParamsField({
 
     const temp: any = {};
 
-    if (params.find((o) => o.name === name)?.type === 7) {
-      if (valueNumber === 1) {
-        temp[name] = [mainParams[name][0], val];
+    if (mainParams[name] instanceof Array) {
+      if (soleNumber !== undefined) {
+        console.log(123123);
+
+        const tempArr = mainParams[name];
+        if (soleNumber === 0) {
+          tempArr[valueNumber] = [val, tempArr[valueNumber]?.at(1)];
+        } else {
+          tempArr[valueNumber] = [tempArr[valueNumber]?.at(0), val];
+        }
+        temp[name] = tempArr;
       } else {
-        temp[name] = [val, mainParams[name][1]];
+        const tempArr = mainParams[name];
+        tempArr[valueNumber] = val;
+        temp[name] = tempArr;
       }
+
+      // if (valueNumber === 1) {
+      //   temp[name] = [mainParams[name][0], val];
+      // } else {
+      //   temp[name] = [val, mainParams[name][1]];
+      // }
     } else {
       temp[name] = val;
     }
@@ -225,7 +246,7 @@ export default function ParamsField({
       case 2:
         return (
           <div className={styles.input_array}>
-            {Array.from(Array(mainParams.numberOfLayers)).map((_, index) => (
+            {Array.from(Array(mainParams.layerCount)).map((_, index) => (
               <div key={`${name} ${index} 1`}>
                 <input
                   type="text"
@@ -236,8 +257,13 @@ export default function ParamsField({
                     params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
                     false
                   }
+                  min={0}
+                  max={10}
+                  value={mainParams[name][index]}
+                  onChange={(e) => onChangingParams(e, name, index)}
+                  className={styles.inputWithSlider}
                 />
-                {index == Array.from(Array(mainParams.numberOfLayers)).length - 1 ? '' : <span>,</span>}
+                {index == Array.from(Array(mainParams.layerCount)).length - 1 ? '' : <span>,</span>}
               </div>
             ))}
           </div>
@@ -245,8 +271,11 @@ export default function ParamsField({
       case 3:
         return (
           <div className={styles.input_array}>
-            {Array.from(Array(mainParams.numberOfLayers)).map((_, index) => (
-              <div key={`${name} ${index}`}>
+            {Array.from(Array(mainParams.layerCount)).map((_, index) => (
+              <div
+                // className={styles.input_array}
+                key={`${name} ${index}`}
+              >
                 <input
                   type="text"
                   name=""
@@ -256,7 +285,11 @@ export default function ParamsField({
                     params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
                     false
                   }
+                  onChange={(e) => onChangingParams(e, name, index, 0)}
+                  className={styles.inputWithSlider}
+                  // value={mainParams[name][index][0]}
                 />
+                <span>-</span>
                 <input
                   type="text"
                   name=""
@@ -266,8 +299,11 @@ export default function ParamsField({
                     params.find((o) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
                     false
                   }
+                  onChange={(e) => onChangingParams(e, name, index, 1)}
+                  className={styles.inputWithSlider}
+                  // value={mainParams[name][index][1]}
                 />
-                {index == Array.from(Array(mainParams.numberOfLayers)).length - 1 ? '' : <span>,</span>}
+                {index == Array.from(Array(mainParams.layerCount)).length - 1 ? '' : <span>,</span>}
               </div>
             ))}
           </div>
@@ -323,14 +359,14 @@ export default function ParamsField({
                 onClick={() => changeChoice(0, name)}
                 className={!mainParams[name] ? styles.active : styles.inactive}
               >
-                {name == 'side' ? 'left' : 'up'}
+                {name == 'side' ? 'left' : 'down'}
               </span>
               /
               <span
                 onClick={() => changeChoice(1, name)}
                 className={mainParams[name] ? styles.active : styles.inactive}
               >
-                {name == 'side' ? 'right' : 'down'}
+                {name == 'side' ? 'right' : 'up'}
               </span>
             </p>
           </div>
@@ -460,7 +496,12 @@ export default function ParamsField({
             alignItems="center"
             key={`${item.name} ${index}`}
           >
-            <Item width="160px">{item.name}</Item>
+            <Item
+              width="160px"
+              flexShrink={0}
+            >
+              {item.name}
+            </Item>
             <div>-</div>
             {typeSwitch(item.type, item.name)}
           </Stack>
