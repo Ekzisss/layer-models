@@ -118,7 +118,7 @@ export default function Home() {
   async function updateGraph() {
     try {
       const response = await axios.post(HOST, mainParams, {
-        headers: { 'Access-Control-Allow-Origin': '*' },
+        headers: { 'Content-Type': 'application/json' },
       });
       const receivedData = response.data.result[0];
 
