@@ -64,8 +64,8 @@ function colorPicker(palette: string[], totalNumber: number) {
 }
 // console.log(colorPicker(gradient, 9));
 
-const HOST = 'https://layer-backend.onrender.com/';
-// const HOST = 'http://127.0.0.1:8000/'
+// const HOST = 'https://layer-backend.onrender.com/';
+const HOST = process.env.SERVER_IP || 'http://127.0.0.1:8000/';
 
 export default function Home() {
   const axios = require('axios').default;

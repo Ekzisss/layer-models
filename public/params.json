@@ -47,7 +47,7 @@
       { "name": "shiftForce", "desc": "", "type": 7, "default": [5, 15], "borders2": [1, 100] },
       { "name": "side", "desc": "", "type": 5, "default": 0 },
       { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
-      { "name": "shiftCount", "desc": "", "type": 4, "default": 1, "borders": [1, 10] }
+      { "name": "shiftCount", "desc": "", "type": 4, "default": 1, "borders": [1, 5] }
     ]
   }
 ]
