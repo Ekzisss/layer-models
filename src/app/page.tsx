@@ -115,9 +115,29 @@ export default function Home() {
     root?.style.setProperty('--primary', themes[currentTheme % themes.length].color);
   }, [currentTheme]);
 
+  async function downloadModels() {
+    const response = await axios.post(HOST, mainParams, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const receivedData = response.data.result;
+
+    let csvContent = 'data:text/csv;charset=utf-8,' + receivedData.map((e: any) => e.join(',')).join('\n');
+    let encodedUri = encodeURI(csvContent);
+
+    const link = document.getElementById('download');
+
+    if (link) {
+      link.setAttribute('download', 'Models');
+      link.setAttribute('href', encodedUri);
+      link.click();
+    }
+  }
+
   async function updateGraph() {
     try {
-      const response = await axios.post(HOST, mainParams, {
+      const fastParams = { ...mainParams };
+      fastParams.N = 1;
+      const response = await axios.post(HOST, fastParams, {
         headers: { 'Content-Type': 'application/json' },
       });
       const receivedData = response.data.result[0];
@@ -214,17 +234,23 @@ export default function Home() {
                     colorForSlider={colorForSlider}
                     mainParams={mainParams}
                     setMainParams={setMainParams}
+                    onChange={updateGraph}
                   ></ParamsField>
                 ))}
               </section>
             </div>
             <div className={`${styles.leftSide__down} ${styles.leftSide__down_real} ${styles.real}`}>
               <button
-                onClick={updateGraph}
+                onClick={downloadModels}
                 className={styles.leftSide__down__submit}
               >
-                Сгенерировать
+                Скачать модели
               </button>
+              <a
+                id="download"
+                target="_blank"
+                rel="noreferrer"
+              ></a>
             </div>
           </div>
           <div className={styles.rightSide}>

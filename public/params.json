@@ -2,21 +2,39 @@
   {
     "sectionName": "Основные",
     "params": [
-      { "name": "N", "desc": "", "type": 0, "default": 10, "borders": [1, 10000] },
-      { "name": "withoutShift", "desc": "", "type": 1, "default": "False" }
+      {
+        "name": "N",
+        "desc": "Количество сгенерированных моделей",
+        "type": 0,
+        "default": 10,
+        "borders": [1, 10000]
+      },
+      {
+        "name": "withoutShift",
+        "desc": "Если значение True - то модель сгенерируется без разлома",
+        "type": 1,
+        "default": "False"
+      },
+      { "name": "shiftCount", "desc": "Количество разломов", "type": 4, "default": 1, "borders": [1, 5] }
     ]
   },
   {
     "sectionName": "Генерация базы",
     "params": [
-      { "name": "generationType", "desc": "", "type": 6, "default": 0 },
-      { "name": "NX", "desc": "", "type": 4, "default": 30, "borders": [10, 100] },
-      { "name": "NY", "desc": "", "type": 4, "default": 60, "borders": [10, 100] },
-      { "name": "layerCount", "desc": "", "type": 4, "default": 3, "borders": [2, 10] },
-      { "name": "layerThickness", "desc": "", "type": 2, "default": [], "disabled": [2] },
+      { "name": "generationType", "desc": "Тип генерации моделей", "type": 6, "default": 0 },
+      { "name": "NX", "desc": "Количество пиктов моделей", "type": 4, "default": 30, "borders": [10, 100] },
+      { "name": "NY", "desc": "Глубина моделей", "type": 4, "default": 60, "borders": [10, 100] },
+      { "name": "layerCount", "desc": "Количество слоёв", "type": 4, "default": 3, "borders": [2, 10] },
+      {
+        "name": "layerThickness",
+        "desc": "Изначальная глубина слоёв",
+        "type": 2,
+        "default": [],
+        "disabled": [2]
+      },
       {
         "name": "scatterMaxValue",
-        "desc": "",
+        "desc": "На сколько глубина может изменится от изначального значения",
         "type": 4,
         "default": 5,
         "disabled": [1, 2],
@@ -24,14 +42,20 @@
       },
       {
         "name": "scatterPeriod",
-        "desc": "",
+        "desc": "Период изменения слоёв",
         "type": 4,
         "default": 2,
         "borders": [1, 10],
         "disabled": [1, 2]
       },
-      { "name": "scatterAmount", "desc": "", "type": 2, "default": [], "disabled": [0, 2] },
-      { "name": "sole", "desc": "", "type": 3, "default": [], "disabled": [0, 1] }
+      {
+        "name": "scatterAmount",
+        "desc": "Опорные точки по высоте для построения гладкой модели",
+        "type": 2,
+        "default": [],
+        "disabled": [0, 2]
+      },
+      { "name": "sole", "desc": "Подошва слоёв", "type": 3, "default": [], "disabled": [0, 1] }
     ]
   },
   {
@@ -39,15 +63,20 @@
     "params": [
       {
         "name": "Y",
-        "desc": "column number of center geological fault",
+        "desc": "Номер пикета из которого начнётся разлом",
         "type": 7,
         "default": [30, 30]
       },
-      { "name": "L", "desc": "", "type": 7, "default": [-10, 10] },
-      { "name": "shiftForce", "desc": "", "type": 7, "default": [5, 15], "borders2": [1, 100] },
-      { "name": "side", "desc": "", "type": 5, "default": 0 },
-      { "name": "shiftType", "desc": "", "type": 5, "default": 0 },
-      { "name": "shiftCount", "desc": "", "type": 4, "default": 1, "borders": [1, 5] }
+      { "name": "L", "desc": "Угол разлома", "type": 7, "default": [-10, 10] },
+      {
+        "name": "shiftForce",
+        "desc": "Сила сдвига разлома",
+        "type": 7,
+        "default": [5, 15],
+        "borders2": [1, 100]
+      },
+      { "name": "side", "desc": "В какой стороне от разлома произойдут изменения", "type": 5, "default": 0 },
+      { "name": "shiftType", "desc": "Выбор сдвига или взброса", "type": 5, "default": 0 }
     ]
   }
 ]

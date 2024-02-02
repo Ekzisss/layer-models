@@ -126,3 +126,23 @@
 .inactive {
   color: #858585;
 }
+
+.description {
+  position: absolute;
+  transform: translateX(100%) translateY(-50%);
+  background-color: var(--text);
+  color: var(--background);
+  padding: 10px;
+  border-radius: 10px;
+  right: 0px;
+  top: -1rem;
+  z-index: 10;
+  width: 300px;
+  pointer-events: none;
+
+  transition: 0.1s linear all;
+
+  &__parent {
+    position: relative;
+  }
+}

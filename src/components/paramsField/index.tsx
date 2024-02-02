@@ -44,16 +44,16 @@ export default function ParamsField({
   colorForSlider,
   mainParams,
   setMainParams,
+  onChange,
 }: {
   sectionName: string;
   params: Types[];
   colorForSlider: string;
   mainParams: any;
   setMainParams: React.Dispatch<any>;
+  onChange: Function;
 }) {
   const [sliderKey, setSliderKey] = React.useState('aaa');
-
-  console.log(mainParams);
 
   useEffect(() => {
     setSliderKey((sliderKey) => sliderKey + 'b');
@@ -76,6 +76,11 @@ export default function ParamsField({
       },
     });
   }, [colorForSlider]);
+
+  useEffect(() => {
+    console.log(mainParams);
+    onChange();
+  }, [mainParams]);
 
   for (const item in mainParams) {
     const borders = params.find((o) => o.name === item)?.borders;
@@ -183,8 +188,6 @@ export default function ParamsField({
 
     if (mainParams[name] instanceof Array) {
       if (soleNumber !== undefined) {
-        console.log(123123);
-
         const tempArr = mainParams[name];
         if (soleNumber === 0) {
           tempArr[valueNumber] = [val, tempArr[valueNumber]?.at(1)];
@@ -198,11 +201,7 @@ export default function ParamsField({
         temp[name] = tempArr;
       }
 
-      // if (valueNumber === 1) {
-      //   temp[name] = [mainParams[name][0], val];
-      // } else {
-      //   temp[name] = [val, mainParams[name][1]];
-      // }
+      console.log(onChange);
     } else {
       temp[name] = val;
     }
@@ -246,7 +245,7 @@ export default function ParamsField({
       case 2:
         return (
           <div className={styles.input_array}>
-            {Array.from(Array(mainParams.layerCount)).map((_, index) => (
+            {Array.from(Array(name === 'scatterAmount' ? 3 : mainParams.layerCount)).map((_, index) => (
               <div key={`${name} ${index} 1`}>
                 <input
                   type="text"
@@ -263,7 +262,12 @@ export default function ParamsField({
                   onChange={(e) => onChangingParams(e, name, index)}
                   className={styles.inputWithSlider}
                 />
-                {index == Array.from(Array(mainParams.layerCount)).length - 1 ? '' : <span>,</span>}
+                {index ==
+                (name === 'scatterAmount' ? 2 : Array.from(Array(mainParams.layerCount)).length - 1) ? (
+                  ''
+                ) : (
+                  <span>,</span>
+                )}
               </div>
             ))}
           </div>
@@ -499,8 +503,22 @@ export default function ParamsField({
             <Item
               width="160px"
               flexShrink={0}
+              onMouseEnter={(Item: any) => {
+                Item.target.parentElement.firstChild.style.opacity = 1;
+              }}
+              onMouseLeave={(Item: any) => {
+                Item.target.parentElement.firstChild.style.opacity = 0;
+              }}
+              className={styles.description__parent}
             >
-              {item.name}
+              <div
+                id={item.name}
+                style={{ opacity: 0 }}
+                className={styles.description}
+              >
+                {item.desc}
+              </div>
+              <p>{item.name}</p>
             </Item>
             <div>-</div>
             {typeSwitch(item.type, item.name)}
