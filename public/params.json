@@ -50,9 +50,9 @@
       },
       {
         "name": "scatterAmount",
-        "desc": "Опорные точки по высоте для построения гладкой модели",
-        "type": 2,
-        "default": [],
+        "desc": "Опорные точки по высоте для построения гладкой модели (Smooth mode only)",
+        "type": 8,
+        "default": [0, 0, 0],
         "disabled": [0, 2]
       },
       { "name": "sole", "desc": "Подошва слоёв", "type": 3, "default": [], "disabled": [0, 1] }

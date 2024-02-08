@@ -25,19 +25,7 @@ import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'rec
 // 5 - choice
 // 6 - 3 choice
 // 7 - 2 sliders
-
-// const chartColor = [
-//   '#fd7f6f',
-//   '#7eb0d5',
-//   '#b2e061',
-//   '#bd7ebe',
-//   '#ffb55a',
-//   '#ffee65',
-//   '#beb9db',
-//   '#fdcce5',
-//   '#8bd3c7',
-//   '#8884d8',
-// ];
+// 8 - hidden illustration
 
 const gradient = [
   '#fde725',
@@ -56,8 +44,6 @@ function colorPicker(palette: string[], totalNumber: number) {
   const result: string[] = [];
   const modifier = 9 / (totalNumber - 1);
   for (let i = 0; i < totalNumber; i++) {
-    console.log(i * modifier);
-
     result.push(palette[Math.round(i * modifier)]);
   }
   return result;
@@ -96,7 +82,7 @@ export default function Home() {
     layerThickness: [],
     scatterMaxValue: 5,
     scatterPeriod: 2,
-    scatterAmount: [],
+    scatterAmount: [15, 0, 0],
     sole: [],
     Y: [30, 30],
     L: [-10, 10],
@@ -142,18 +128,13 @@ export default function Home() {
       });
       const receivedData = response.data.result[0];
 
-      console.log(receivedData);
-
       const dataPerLayer: any[] = [];
 
       for (let i = 0; i < mainParams.layerCount; i++) {
         dataPerLayer.push(
           receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - 4)
         );
-        console.log(i);
       }
-
-      console.log(dataPerLayer);
 
       const data = dataPerLayer[0].map((item: any, index: number) => {
         return { 'layer 0': item };
@@ -166,15 +147,8 @@ export default function Home() {
         });
       }
 
-      console.log(data);
-      console.log(getAllValues(dataPerLayer, 0, 1));
-
       // const chartColor = colorPicker(gradient, mainParams.layerCount);
       setChartColors(colorPicker(gradient, mainParams.layerCount));
-
-      Object.keys(data[0]).map((key, index) => {
-        console.log(key, index);
-      });
 
       setDataForChart(data);
     } catch (error) {
@@ -286,7 +260,6 @@ export default function Home() {
                   aspect={1}
                 >
                   <AreaChart
-                    // height={1250}
                     data={dataForChart}
                     margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
                   >
@@ -299,27 +272,11 @@ export default function Home() {
                           stroke={chartColors[index]}
                           fill={chartColors[index]}
                           stackId="1"
+                          animationDuration={500}
+                          type="monotone"
+                          // type="linear"
                         ></Area>
                       ))}
-                    {/* <Area
-                      dataKey="layer 0"
-                      stroke="#8884d8"
-                      fill="#8884d8"
-                      stackId="1"
-                    ></Area>
-                    <Area
-                      dataKey="layer 1"
-                      stroke="#82ca9d"
-                      fill="#82ca9d"
-                      stackId="1"
-                    ></Area>
-                    <Area
-                      dataKey="layer 2"
-                      stroke="#ffc658"
-                      fill="#ffc658"
-                      stackId="1"
-                    ></Area> */}
-                    {/* <CartesianGrid stroke="#ccc" /> */}
                     <XAxis
                       stroke="#ccc"
                       // dataKey="name"
@@ -329,8 +286,8 @@ export default function Home() {
                       stroke="#ccc"
                       markerHeight={20}
                       reversed={true}
+                      domain={[0, mainParams.NY]}
                     />
-                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

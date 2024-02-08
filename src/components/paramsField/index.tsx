@@ -1,17 +1,44 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, PureComponent } from 'react';
 import styles from './style.module.scss';
 import { Montserrat } from 'next/font/google';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import { styled } from '@mui/material/styles';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 let SliderStyle = styled(Slider)({
-  color: 'rgb(240, 74, 74)',
+  color: 'rgba(240, 74, 74)',
+  '& .MuiSlider-thumb': {
+    height: 15,
+    width: 15,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit',
+    },
+    '&:before': {
+      display: 'none',
+    },
+    '&:after': {
+      display: 'none',
+    },
+  },
+});
+
+let SliderTransparent = styled(Slider)({
+  color: 'rgba(0, 0, 0, 0)',
+  disabled: {
+    color: 'rgba(0, 0, 0, 0)',
+  },
+  '&.Mui-disabled': {
+    color: 'rgba(0, 0, 0, 0)',
+  },
+
   '& .MuiSlider-thumb': {
     height: 15,
     width: 15,
@@ -185,6 +212,8 @@ export default function ParamsField({
     const val: number = +e.target.value;
 
     const temp: any = {};
+    console.log(name);
+    console.log(val);
 
     if (mainParams[name] instanceof Array) {
       if (soleNumber !== undefined) {
@@ -203,6 +232,11 @@ export default function ParamsField({
 
       console.log(onChange);
     } else {
+      temp.scatterAmount = [
+        Math.floor(name === 'NY' ? val / 2 : mainParams.NY / 2),
+        ...mainParams.scatterAmount.slice(1),
+      ];
+      console.log(temp.scatterAmount);
       temp[name] = val;
     }
 
@@ -476,6 +510,64 @@ export default function ParamsField({
                 key={sliderKey}
               ></SliderStyle>
             </Item>
+          </div>
+        );
+      case 8:
+        return (
+          <div
+            style={{ opacity: mainParams.generationType !== 1 ? 0.5 : 1 }}
+            className={styles.hidden_input}
+          >
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+              <LineChart
+                data={mainParams.scatterAmount.map((item: number) => {
+                  return { value: item };
+                })}
+              >
+                <YAxis
+                  hide={true}
+                  type="number"
+                  domain={[-mainParams.NY, mainParams.NY]}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="rgb(240, 74, 74)"
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+            <div className={styles.hidden_input__sliders}>
+              {Array.apply(null, Array(3)).map((_, index) =>
+                index !== 0 ? (
+                  <SliderTransparent
+                    key={index}
+                    sx={{
+                      '& input[type="range"]': {
+                        WebkitAppearance: 'vertical writing-mode',
+                      },
+                    }}
+                    orientation="vertical"
+                    defaultValue={30}
+                    aria-label="Temperature"
+                    valueLabelDisplay="auto"
+                    min={-mainParams.NY}
+                    max={mainParams.NY}
+                    value={mainParams[name][index]}
+                    onChange={(e) => onChangingParams(e, name, index)}
+                    disabled={mainParams.generationType !== 1}
+                  />
+                ) : (
+                  <div
+                    style={{ width: '30px' }}
+                    key={index}
+                  ></div>
+                )
+              )}
+            </div>
           </div>
         );
       default:
