@@ -50,7 +50,8 @@ function colorPicker(palette: string[], totalNumber: number) {
 }
 // console.log(colorPicker(gradient, 9));
 
-// const HOST = 'https://layer-backend.onrender.com/'
+const HOST = 'https://layer-backend.onrender.com/'
+// const HOST = process.env.SERVER_IP || 'http://127.0.0.1:8000/';
 
 export default function Home() {
   const axios = require('axios').default;
@@ -70,8 +71,6 @@ export default function Home() {
     '#482878',
     '#440154',
   ]);
-
-  const HOST = process.env.SERVER_IP || 'http://127.0.0.1:8000/';
 
   const [mainParams, setMainParams] = useState<any>({
     N: 10,
