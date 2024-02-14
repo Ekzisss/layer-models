@@ -103,7 +103,7 @@ export default function Home() {
 
   async function downloadModels() {
     const response = await axios.post(HOST, mainParams, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
     const receivedData = response.data.result;
 
