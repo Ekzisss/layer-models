@@ -13,6 +13,7 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 
 import PaletteIcon from '@mui/icons-material/Palette';
 import OpacityIcon from '@mui/icons-material/Opacity';
+const axios = require('axios').default;
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -48,13 +49,10 @@ function colorPicker(palette: string[], totalNumber: number) {
   }
   return result;
 }
-// console.log(colorPicker(gradient, 9));
 
-const HOST = 'https://layer-backend.onrender.com/'
-// const HOST = process.env.SERVER_IP || 'http://127.0.0.1:8000/';
+const HOST = process.env.NEXT_PUBLIC_SERVER_IP;
 
 export default function Home() {
-  const axios = require('axios').default;
   const [opacityMode, setOpacityMode] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(0);
   const [colorForSlider, setColorForSlider] = useState('rgb(240, 74, 74)');
