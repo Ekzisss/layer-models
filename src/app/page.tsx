@@ -13,7 +13,7 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 
 import PaletteIcon from '@mui/icons-material/Palette';
 import OpacityIcon from '@mui/icons-material/Opacity';
-const axios = require('axios').default;
+import axios from 'axios';
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -100,6 +100,7 @@ export default function Home() {
   }, [currentTheme]);
 
   async function downloadModels() {
+    if (!HOST) return;
     const response = await axios.post(HOST, mainParams, {
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
@@ -119,6 +120,7 @@ export default function Home() {
 
   async function updateGraph() {
     try {
+      if (!HOST) return;
       const fastParams = { ...mainParams };
       fastParams.N = 1;
       const response = await axios.post(HOST, fastParams, {
