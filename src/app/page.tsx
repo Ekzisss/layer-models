@@ -50,9 +50,8 @@ function colorPicker(palette: string[], totalNumber: number) {
   return result;
 }
 
-const HOST = process.env.NEXT_PUBLIC_SERVER_IP;
-
 export default function Home() {
+  const HOST = process.env.NEXT_PUBLIC_SERVER_IP;
   const [opacityMode, setOpacityMode] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(0);
   const [colorForSlider, setColorForSlider] = useState('rgb(240, 74, 74)');
