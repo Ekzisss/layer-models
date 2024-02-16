@@ -17,17 +17,6 @@ import axios from 'axios';
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-// types
-// 0 - textbox
-// 1 - checkbox
-// 2 - array
-// 3 - array of array1
-// 4 - slider
-// 5 - choice
-// 6 - 3 choice
-// 7 - 2 sliders
-// 8 - hidden illustration
-
 const gradient = [
   '#fde725',
   '#b5de2b',
@@ -81,15 +70,19 @@ export default function Home() {
     scatterPeriod: 2,
     scatterAmount: [15, 0, 0],
     sole: [],
-    Y: [30, 30],
-    L: [-10, 10],
+    Y: [10, 20],
+    L: [-30, -10],
     shiftForce: [5, 15],
-    side: 0,
-    shiftType: 0,
+    side: false,
+    shiftType: false,
     shiftCount: 1,
   });
 
   // const chartColor = colorPicker(gradient, mainParams.layerCount);
+  useEffect(() => {
+    console.log(mainParams);
+    updateGraph();
+  }, [mainParams]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -207,7 +200,6 @@ export default function Home() {
                     colorForSlider={colorForSlider}
                     mainParams={mainParams}
                     setMainParams={setMainParams}
-                    onChange={updateGraph}
                   ></ParamsField>
                 ))}
               </section>

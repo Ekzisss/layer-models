@@ -65,9 +65,9 @@
         "name": "Y",
         "desc": "Номер пикета из которого начнётся разлом",
         "type": 7,
-        "default": [30, 30]
+        "default": [10, 20]
       },
-      { "name": "L", "desc": "Угол разлома", "type": 7, "default": [-10, 10] },
+      { "name": "L", "desc": "Угол разлома", "type": 7, "default": [10, 30] },
       {
         "name": "shiftForce",
         "desc": "Сила сдвига разлома",
@@ -75,8 +75,13 @@
         "default": [5, 15],
         "borders2": [1, 100]
       },
-      { "name": "side", "desc": "В какой стороне от разлома произойдут изменения", "type": 5, "default": 0 },
-      { "name": "shiftType", "desc": "Выбор сдвига или взброса", "type": 5, "default": 0 }
+      {
+        "name": "side",
+        "desc": "В какой стороне от разлома произойдут изменения",
+        "type": 1,
+        "default": false
+      },
+      { "name": "shiftType", "desc": "Выбор сдвига или взброса", "type": 1, "default": false }
     ]
   }
 ]
