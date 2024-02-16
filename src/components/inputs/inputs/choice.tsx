@@ -6,16 +6,18 @@ export default function ChangeInput({
   name,
   onChangingParams,
   tripleChoice,
+  shiftNumber,
 }: {
   mainParams: any;
   name: string;
   onChangingParams: Function;
   tripleChoice?: boolean;
+  shiftNumber: Number;
 }) {
   const values: any = {
-    withoutShift: ['true', 'false'],
+    withoutShift: ['false', 'true'],
     side: ['left', 'right'],
-    shiftType: ['up', 'down'],
+    shiftType: ['down', 'up'],
     generationType: ['scatter', 'smooth', 'sole'],
   };
   if (tripleChoice)
@@ -50,15 +52,31 @@ export default function ChangeInput({
       <div className={styles.input_choice}>
         <p>
           <span
-            className={mainParams[name] ? styles.active : styles.inactive}
-            onClick={() => onChangingParams(true, name)}
+            className={
+              Array.isArray(mainParams[name])
+                ? mainParams[name][shiftNumber.valueOf() - 1]
+                  ? styles.inactive
+                  : styles.active
+                : mainParams[name]
+                ? styles.inactive
+                : styles.active
+            }
+            onClick={() => onChangingParams(false, name)}
           >
             {values[name][0]}
           </span>
           /
           <span
-            onClick={() => onChangingParams(false, name)}
-            className={!mainParams[name] ? styles.active : styles.inactive}
+            onClick={() => onChangingParams(true, name)}
+            className={
+              Array.isArray(mainParams[name])
+                ? !mainParams[name][shiftNumber.valueOf() - 1]
+                  ? styles.inactive
+                  : styles.active
+                : !mainParams[name]
+                ? styles.inactive
+                : styles.active
+            }
           >
             {values[name][1]}
           </span>

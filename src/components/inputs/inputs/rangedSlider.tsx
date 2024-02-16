@@ -1,7 +1,5 @@
 import React from 'react';
-import styles from '../inputStyle.module.scss';
 import Slider from '@mui/material/Slider';
-import Item from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
 let SliderStyle = styled(Slider)({
@@ -28,17 +26,25 @@ export default function RangedSlider({
   name,
   onChangingParams,
   params,
+  shiftNumber,
 }: {
   mainParams: any;
   name: string;
   onChangingParams: Function;
   params: any;
+  shiftNumber: Number;
 }) {
   const borders: any = {
     Y: [0, 'NX'],
     L: [
-      (!mainParams.side && !mainParams.shiftType) || (mainParams.side && mainParams.shiftType) ? -45 : 1,
-      (!mainParams.side && !mainParams.shiftType) || (mainParams.side && mainParams.shiftType) ? -1 : 45,
+      (!mainParams.side[shiftNumber.valueOf() - 1] && !mainParams.shiftType[shiftNumber.valueOf() - 1]) ||
+      (mainParams.side[shiftNumber.valueOf() - 1] && mainParams.shiftType[shiftNumber.valueOf() - 1])
+        ? -45
+        : 1,
+      (!mainParams.side[shiftNumber.valueOf() - 1] && !mainParams.shiftType[shiftNumber.valueOf() - 1]) ||
+      (mainParams.side[shiftNumber.valueOf() - 1] && mainParams.shiftType[shiftNumber.valueOf() - 1])
+        ? -1
+        : 45,
     ],
     shiftForce: [0, 'NY'],
   };
@@ -47,14 +53,9 @@ export default function RangedSlider({
       getAriaLabel={() => 'Temperature range'}
       defaultValue={params.find((o: any) => o.name === name)?.default || 0}
       valueLabelDisplay="auto"
-      value={mainParams[name]}
+      value={mainParams[name][shiftNumber.valueOf() - 1]}
       min={typeof borders[name][0] === 'number' ? borders[name][0] : mainParams[borders[name][0]]}
       max={typeof borders[name][1] === 'number' ? borders[name][1] : mainParams[borders[name][1]]}
-      // max={
-      //   params.find((o: any) => o.name === name)?.borders?.at(1) ||
-      //   (name == 'center' && mainParams.NX) ||
-      //   45
-      // }
       onChange={(e: any) => onChangingParams(e, name)}
       // key={sliderKey}
     ></SliderStyle>

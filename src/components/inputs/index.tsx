@@ -12,17 +12,14 @@ export default function Inputs({
   name,
   setMainParams,
   params,
+  shiftNumber,
 }: {
   mainParams: any;
   name: string;
   setMainParams: Function;
   params?: any;
+  shiftNumber: Number;
 }) {
-  // React.useEffect(() => {
-  //   console.log(mainParams);
-  //   // onChange();
-  // }, [mainParams]);
-
   function onChangingParams(
     e: any,
     name: string,
@@ -65,24 +62,27 @@ export default function Inputs({
   }
 
   function changeChoice(value: any, name: string) {
-    if (value === mainParams[name]) return;
+    if (value === mainParams[name][shiftNumber.valueOf() - 1] || !shiftNumber) return;
     const temp: any = { ...mainParams };
-    temp[name] = value;
 
     if (name === 'side' || name === 'shiftType') {
-      temp.L = [-temp.L[0], -temp.L[1]];
-    }
+      temp.L[shiftNumber.valueOf() - 1] = [
+        -temp.L[shiftNumber.valueOf() - 1][0],
+        -temp.L[shiftNumber.valueOf() - 1][1],
+      ];
+      temp[name][shiftNumber.valueOf() - 1] = value;
+    } else temp[name] = value;
 
     setMainParams(temp);
   }
 
   function changeRangeSlider(e: any, name: string) {
-    console.log(e.target.value);
+    if (!shiftNumber) return;
 
-    const val = e.target.value;
+    const val: any = e.target.value;
 
     const temp: any = { ...mainParams };
-    temp[name] = val;
+    temp[name][shiftNumber.valueOf() - 1] = val;
     setMainParams(temp);
   }
 
@@ -106,6 +106,7 @@ export default function Inputs({
             name={name}
             onChangingParams={changeChoice}
             tripleChoice={name === 'generationType'}
+            shiftNumber={shiftNumber}
           />
         );
       case 'layerThickness':
@@ -147,6 +148,7 @@ export default function Inputs({
             name={name}
             onChangingParams={changeRangeSlider}
             params={params}
+            shiftNumber={shiftNumber}
           />
         );
       case 'scatterAmount':

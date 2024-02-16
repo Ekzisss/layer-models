@@ -26,12 +26,14 @@ export default function ParamsField({
   colorForSlider,
   mainParams,
   setMainParams,
+  shiftNumber = 1,
 }: {
   sectionName: string;
   params: Types[];
   colorForSlider: string;
   mainParams: any;
   setMainParams: React.Dispatch<any>;
+  shiftNumber?: Number;
 }) {
   const [sliderKey, setSliderKey] = React.useState('aaa');
 
@@ -175,6 +177,7 @@ export default function ParamsField({
               name={item.name}
               setMainParams={setMainParams}
               params={params}
+              shiftNumber={shiftNumber}
             />
           </Stack>
         ))}
