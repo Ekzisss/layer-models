@@ -1,0 +1,123 @@
+.input_choice {
+  margin: auto;
+
+  p {
+    span {
+      cursor: pointer;
+    }
+
+    span:first-child {
+      position: relative;
+      top: -3px;
+    }
+
+    span:last-child {
+      position: relative;
+      top: 3px;
+    }
+  }
+}
+
+.active {
+  color: var(--primary);
+}
+
+.inactive {
+  color: #858585;
+}
+
+.input_text {
+  position: relative;
+  width: 100px;
+  margin-inline: auto;
+  display: block;
+  height: 20px;
+  min-width: 0;
+
+  text-align: center;
+  background-color: var(--text);
+  color: var(--background);
+}
+
+.input_range {
+  flex-grow: 1;
+  min-width: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.input_array {
+  gap: 5px;
+  display: flex;
+  margin: auto;
+  min-width: 0px;
+  flex-wrap: wrap;
+  position: relative;
+
+  &::before {
+    content: "[";
+    position: absolute;
+    top: 0;
+    left: -12px;
+  }
+
+  &::after {
+    content: "]";
+  }
+
+  input {
+    width: 20px;
+    display: block;
+  }
+
+  div {
+    display: flex;
+    gap: 2px;
+  }
+}
+
+.inputSliderContainer {
+  display: flex;
+  gap: 15px;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.inputWithSlider {
+  text-align: center;
+  background-color: rgb(240, 240, 240);
+  color: var(--background);
+
+  width: 30px;
+  height: 20px;
+
+  &:disabled {
+    background-color: rgba(239, 239, 239, 0.3);
+  }
+}
+
+.hidden_input {
+  width: 100%;
+  aspect-ratio: 4/1;
+  position: relative;
+  padding: 3px;
+
+  border-top: 1px var(--text) solid;
+  border-bottom: 1px var(--text) solid;
+
+  &__box {
+    width: 100px;
+    height: 100px;
+    background-color: wheat;
+  }
+
+  &__sliders {
+    top: 5%;
+    width: 100%;
+    height: 90%;
+    position: absolute;
+
+    display: flex;
+    justify-content: space-between;
+  }
+}

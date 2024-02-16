@@ -17,17 +17,6 @@ import axios from 'axios';
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-// types
-// 0 - textbox
-// 1 - checkbox
-// 2 - array
-// 3 - array of array1
-// 4 - slider
-// 5 - choice
-// 6 - 3 choice
-// 7 - 2 sliders
-// 8 - hidden illustration
-
 const gradient = [
   '#fde725',
   '#b5de2b',
@@ -81,15 +70,37 @@ export default function Home() {
     scatterPeriod: 2,
     scatterAmount: [15, 0, 0],
     sole: [],
-    Y: [30, 30],
-    L: [-10, 10],
-    shiftForce: [5, 15],
-    side: 0,
-    shiftType: 0,
+    Y: [
+      [10, 20],
+      [10, 20],
+      [10, 20],
+      [10, 20],
+      [10, 20],
+    ],
+    L: [
+      [10, 30],
+      [10, 30],
+      [10, 30],
+      [10, 30],
+      [10, 30],
+    ],
+    shiftForce: [
+      [5, 15],
+      [5, 15],
+      [5, 15],
+      [5, 15],
+      [5, 15],
+    ],
+    side: [true, true, true, true, true],
+    shiftType: [false, false, false, false, false],
     shiftCount: 1,
   });
 
   // const chartColor = colorPicker(gradient, mainParams.layerCount);
+  useEffect(() => {
+    console.log(mainParams);
+    updateGraph();
+  }, [mainParams]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -100,8 +111,14 @@ export default function Home() {
 
   async function downloadModels() {
     if (!HOST) return;
-    const response = await axios.post(HOST, mainParams, {
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    const fastParams = { ...mainParams };
+    fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
+    fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
+    fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
+    fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
+    fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+    const response = await axios.post(HOST, fastParams, {
+      headers: { 'Content-Type': 'application/json' },
     });
     const receivedData = response.data.result;
 
@@ -122,6 +139,11 @@ export default function Home() {
       if (!HOST) return;
       const fastParams = { ...mainParams };
       fastParams.N = 1;
+      fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
+      fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
+      fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
+      fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
+      fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
       const response = await axios.post(HOST, fastParams, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -131,7 +153,10 @@ export default function Home() {
 
       for (let i = 0; i < mainParams.layerCount; i++) {
         dataPerLayer.push(
-          receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - 4)
+          receivedData.slice(
+            i * mainParams.NX,
+            -(mainParams.NX * (mainParams.layerCount - 1 - i)) - mainParams.shiftCount * 2
+          )
         );
       }
 
@@ -142,25 +167,15 @@ export default function Home() {
       for (let i = 1; i < dataPerLayer.length; i++) {
         dataPerLayer[i].map((item: any, index: number) => {
           data[index][`layer ${i}`] = item - dataPerLayer[i - 1][index];
-          // return { value: item };
         });
       }
 
-      // const chartColor = colorPicker(gradient, mainParams.layerCount);
       setChartColors(colorPicker(gradient, mainParams.layerCount));
 
       setDataForChart(data);
     } catch (error) {
       console.log(error);
     }
-  }
-
-  function getAllValues(arr: any[], index: number, countTo: number = 0) {
-    let sum = 0;
-    for (let i = 0; i < countTo; i++) {
-      sum += arr[i][index];
-    }
-    return sum;
   }
 
   return (
@@ -202,14 +217,28 @@ export default function Home() {
                 {params.map((item, index) => (
                   <ParamsField
                     key={index}
-                    sectionName={item.sectionName}
+                    sectionName={
+                      item.sectionName !== 'Генерация разреза' ? item.sectionName : 'Генерация разреза №1'
+                    }
                     params={item.params}
                     colorForSlider={colorForSlider}
                     mainParams={mainParams}
                     setMainParams={setMainParams}
-                    onChange={updateGraph}
                   ></ParamsField>
                 ))}
+                {Array(mainParams.shiftCount - 1)
+                  .fill(0)
+                  .map((_, index) => (
+                    <ParamsField
+                      key={index}
+                      sectionName={`${params[2].sectionName} №${index + 2}`}
+                      params={params[2].params}
+                      colorForSlider={colorForSlider}
+                      mainParams={mainParams}
+                      setMainParams={setMainParams}
+                      shiftNumber={index + 2}
+                    ></ParamsField>
+                  ))}
               </section>
             </div>
             <div className={`${styles.leftSide__down} ${styles.leftSide__down_real} ${styles.real}`}>
@@ -273,12 +302,10 @@ export default function Home() {
                           stackId="1"
                           animationDuration={500}
                           type="monotone"
-                          // type="linear"
                         ></Area>
                       ))}
                     <XAxis
                       stroke="#ccc"
-                      // dataKey="name"
                       orientation="top"
                     />
                     <YAxis
