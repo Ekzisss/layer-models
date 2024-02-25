@@ -15,7 +15,7 @@
         "type": 1,
         "default": "False"
       },
-      { "name": "shiftCount", "desc": "Количество разломов", "type": 4, "default": 1, "borders": [1, 5] }
+      { "name": "shiftCount", "desc": "Количество разломов", "type": 4, "default": 1, "borders": [1, 3] }
     ]
   },
   {
