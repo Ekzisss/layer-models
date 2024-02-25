@@ -139,6 +139,8 @@ export default function Home() {
       fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
       fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
       fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+      if (fastParams.scatterAmount.length !== fastParams.layerCount || fastParams.scatterAmount.includes(undefined))
+        fastParams.scatterAmount = [];
       const response = await axios.post(HOST, fastParams, {
         headers: { 'Content-Type': 'application/json' },
       });
