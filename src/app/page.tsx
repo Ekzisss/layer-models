@@ -17,18 +17,13 @@ import axios from 'axios';
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-const gradient = [
-  '#fde725',
-  '#b5de2b',
-  '#6ece58',
-  '#35b779',
-  '#1f9e89',
-  '#26828e',
-  '#31688e',
-  '#3e4989',
-  '#482878',
-  '#440154',
-];
+import bg1 from '../img/bg2.jpg';
+import bg2 from '../img/dark.png';
+import bg3 from '../img/cyber.jpg';
+
+const gradient = ['#fde725', '#b5de2b', '#6ece58', '#35b779', '#1f9e89', '#26828e', '#31688e', '#3e4989', '#482878', '#440154'];
+
+const bgs = [bg1, bg2, bg3];
 
 function colorPicker(palette: string[], totalNumber: number) {
   const result: string[] = [];
@@ -68,7 +63,7 @@ export default function Home() {
     layerThickness: [],
     scatterMaxValue: 5,
     scatterPeriod: 2,
-    scatterAmount: [15, 0, 0],
+    scatterAmount: [0, 0, 0],
     sole: [],
     Y: [
       [10, 20],
@@ -153,10 +148,7 @@ export default function Home() {
 
       for (let i = 0; i < mainParams.layerCount; i++) {
         dataPerLayer.push(
-          receivedData.slice(
-            i * mainParams.NX,
-            -(mainParams.NX * (mainParams.layerCount - 1 - i)) - mainParams.shiftCount * 2
-          )
+          receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - mainParams.shiftCount * 2)
         );
       }
 
@@ -182,30 +174,18 @@ export default function Home() {
     <div className={styles.base}>
       <div
         style={{
-          background: `url(${themes[currentTheme % themes.length].bg}) center/cover no-repeat`,
+          background: `url(${bgs[currentTheme % 3].src}) center/cover no-repeat`,
         }}
         className={styles.bg}
       >
         <div className={`${styles.main} ${styles.main_decoration}`}>
           <div className={styles.leftSide}>
-            <div
-              style={opacityMode ? { opacity: 1 } : {}}
-              className={styles.leftSide__up}
-            ></div>
-            <div
-              style={opacityMode ? { opacity: 1 } : {}}
-              className={styles.leftSide__down}
-            ></div>
+            <div style={opacityMode ? { opacity: 1 } : {}} className={styles.leftSide__up}></div>
+            <div style={opacityMode ? { opacity: 1 } : {}} className={styles.leftSide__down}></div>
           </div>
           <div className={styles.rightSide}>
-            <div
-              style={opacityMode ? { opacity: 1 } : {}}
-              className={styles.rightSide__up}
-            ></div>
-            <div
-              style={opacityMode ? { opacity: 0 } : {}}
-              className={styles.rightSide__down}
-            ></div>
+            <div style={opacityMode ? { opacity: 1 } : {}} className={styles.rightSide__up}></div>
+            <div style={opacityMode ? { opacity: 0 } : {}} className={styles.rightSide__down}></div>
           </div>
         </div>
 
@@ -217,9 +197,7 @@ export default function Home() {
                 {params.map((item, index) => (
                   <ParamsField
                     key={index}
-                    sectionName={
-                      item.sectionName !== 'Генерация разреза' ? item.sectionName : 'Генерация разреза №1'
-                    }
+                    sectionName={item.sectionName !== 'Генерация разреза' ? item.sectionName : 'Генерация разреза №1'}
                     params={item.params}
                     colorForSlider={colorForSlider}
                     mainParams={mainParams}
@@ -242,17 +220,10 @@ export default function Home() {
               </section>
             </div>
             <div className={`${styles.leftSide__down} ${styles.leftSide__down_real} ${styles.real}`}>
-              <button
-                onClick={downloadModels}
-                className={styles.leftSide__down__submit}
-              >
+              <button onClick={downloadModels} className={styles.leftSide__down__submit}>
                 Скачать модели
               </button>
-              <a
-                id="download"
-                target="_blank"
-                rel="noreferrer"
-              ></a>
+              <a id="download" target="_blank" rel="noreferrer"></a>
             </div>
           </div>
           <div className={styles.rightSide}>
@@ -265,32 +236,17 @@ export default function Home() {
                   <span className={styles.languageActive}>ru</span> / <span>en</span>
                 </p>
               </div>
-              <div
-                onClick={() => setOpacityMode(!opacityMode)}
-                className={styles.circle}
-              >
+              <div onClick={() => setOpacityMode(!opacityMode)} className={styles.circle}>
                 <OpacityIcon className={styles.darkMode}></OpacityIcon>
               </div>
-              <div
-                onClick={() => setCurrentTheme(currentTheme + 1)}
-                className={styles.circle}
-              >
+              <div onClick={() => setCurrentTheme(currentTheme + 1)} className={styles.circle}>
                 <PaletteIcon className={styles.darkMode}></PaletteIcon>
               </div>
             </div>
             <div className={`${styles.rightSide__down} ${styles.rightSide__down_real}  ${styles.real}`}>
-              <div
-                style={opacityMode ? { backgroundColor: 'rgba(68, 68, 68, 1)' } : {}}
-                className={styles.display}
-              >
-                <ResponsiveContainer
-                  width="100%"
-                  aspect={1}
-                >
-                  <AreaChart
-                    data={dataForChart}
-                    margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
-                  >
+              <div style={opacityMode ? { backgroundColor: 'rgba(68, 68, 68, 1)' } : {}} className={styles.display}>
+                <ResponsiveContainer width="100%" aspect={1}>
+                  <AreaChart data={dataForChart} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                     <Tooltip />
                     {dataForChart[0] &&
                       Object.keys(dataForChart[0]).map((key, index) => (
@@ -304,16 +260,8 @@ export default function Home() {
                           type="monotone"
                         ></Area>
                       ))}
-                    <XAxis
-                      stroke="#ccc"
-                      orientation="top"
-                    />
-                    <YAxis
-                      stroke="#ccc"
-                      markerHeight={20}
-                      reversed={true}
-                      domain={[0, mainParams.NY]}
-                    />
+                    <XAxis stroke="#ccc" orientation="top" />
+                    <YAxis stroke="#ccc" markerHeight={20} reversed={true} domain={[0, mainParams.NY]} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

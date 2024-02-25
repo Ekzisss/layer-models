@@ -20,12 +20,7 @@ export default function Inputs({
   params?: any;
   shiftNumber: Number;
 }) {
-  function onChangingParams(
-    e: any,
-    name: string,
-    valueNumber: number = 0,
-    soleNumber: number | undefined = undefined
-  ) {
+  function onChangingParams(e: any, name: string, valueNumber: number = 0, soleNumber: number | undefined = undefined) {
     if (Number.isNaN(+e.target.value)) {
       return;
     }
@@ -51,10 +46,6 @@ export default function Inputs({
         temp[name] = tempArr;
       }
     } else {
-      temp.scatterAmount = [
-        Math.floor(name === 'NY' ? val / 2 : mainParams.NY / 2),
-        ...mainParams.scatterAmount.slice(1),
-      ];
       temp[name] = val;
     }
 
@@ -66,10 +57,7 @@ export default function Inputs({
     const temp: any = { ...mainParams };
 
     if (name === 'side' || name === 'shiftType') {
-      temp.L[shiftNumber.valueOf() - 1] = [
-        -temp.L[shiftNumber.valueOf() - 1][0],
-        -temp.L[shiftNumber.valueOf() - 1][1],
-      ];
+      temp.L[shiftNumber.valueOf() - 1] = [-temp.L[shiftNumber.valueOf() - 1][0], -temp.L[shiftNumber.valueOf() - 1][1]];
       temp[name][shiftNumber.valueOf() - 1] = value;
     } else temp[name] = value;
 
@@ -89,13 +77,7 @@ export default function Inputs({
   function switchResult(name: any) {
     switch (name) {
       case 'N':
-        return (
-          <TextInput
-            mainParams={mainParams}
-            name={name}
-            onChangingParams={onChangingParams}
-          />
-        );
+        return <TextInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} />;
       case 'withoutShift':
       case 'side':
       case 'shiftType':
@@ -110,35 +92,16 @@ export default function Inputs({
           />
         );
       case 'layerThickness':
-        return (
-          <ArrayInput
-            mainParams={mainParams}
-            name={name}
-            onChangingParams={onChangingParams}
-          />
-        );
+        return <ArrayInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} />;
       case 'sole':
-        return (
-          <Array2dInput
-            mainParams={mainParams}
-            name={name}
-            onChangingParams={onChangingParams}
-          />
-        );
+        return <Array2dInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} />;
       case 'shiftCount':
       case 'NX':
       case 'NY':
       case 'layerCount':
       case 'scatterMaxValue':
       case 'scatterPeriod':
-        return (
-          <SliderInput
-            mainParams={mainParams}
-            name={name}
-            onChangingParams={onChangingParams}
-            params={params}
-          />
-        );
+        return <SliderInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} params={params} />;
       case 'Y':
       case 'L':
       case 'shiftForce':
@@ -152,14 +115,7 @@ export default function Inputs({
           />
         );
       case 'scatterAmount':
-        return (
-          <InteractiveChange
-            mainParams={mainParams}
-            name={name}
-            onChangingParams={onChangingParams}
-            params={params}
-          />
-        );
+        return <InteractiveChange mainParams={mainParams} name={name} onChangingParams={onChangingParams} params={params} />;
     }
   }
 
