@@ -1,5 +1,5 @@
 [
-  { "name": "dragon", "color": "rgb(240, 74, 74)", "bg": "/bg2.jpg" },
+  { "name": "dragon", "color": "rgb(240, 74, 74)", "bg": "/bgg.jpg" },
   { "name": "dark", "color": "rgb(112, 72, 255)", "bg": "/dark.png" },
   { "name": "neon", "color": "#f81dfd", "bg": "/cyber.jpg" }
 ]

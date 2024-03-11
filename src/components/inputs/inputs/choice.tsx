@@ -18,31 +18,18 @@ export default function ChangeInput({
     withoutShift: ['false', 'true'],
     side: ['left', 'right'],
     shiftType: ['down', 'up'],
-    generationType: ['scatter', 'smooth', 'sole'],
+    generationType: ['scatter', 'smooth'],
   };
   if (tripleChoice)
     return (
       <div className={styles.input_choice}>
         <p>
-          <span
-            onClick={() => onChangingParams(0, name)}
-            className={mainParams[name] === 0 ? styles.active : styles.inactive}
-          >
+          <span onClick={() => onChangingParams(0, name)} className={mainParams[name] === 0 ? styles.active : styles.inactive}>
             {values[name][0]}
           </span>
           /
-          <span
-            onClick={() => onChangingParams(1, name)}
-            className={mainParams[name] === 1 ? styles.active : styles.inactive}
-          >
+          <span onClick={() => onChangingParams(1, name)} className={mainParams[name] === 1 ? styles.active : styles.inactive}>
             {values[name][1]}
-          </span>
-          /
-          <span
-            onClick={() => onChangingParams(2, name)}
-            className={mainParams[name] === 2 ? styles.active : styles.inactive}
-          >
-            {values[name][2]}
           </span>
         </p>
       </div>

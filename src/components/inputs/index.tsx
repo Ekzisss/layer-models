@@ -2,7 +2,6 @@ import React from 'react';
 import TextInput from './inputs/text';
 import ChangeInput from './inputs/choice';
 import ArrayInput from './inputs/array';
-import Array2dInput from './inputs/2dArray';
 import SliderInput from './inputs/slider';
 import RangedSlider from './inputs/rangedSlider';
 import InteractiveChange from './inputs/InteractiveChange';
@@ -20,7 +19,7 @@ export default function Inputs({
   params?: any;
   shiftNumber: Number;
 }) {
-  function onChangingParams(e: any, name: string, valueNumber: number = 0, soleNumber: number | undefined = undefined) {
+  function onChangingParams(e: any, name: string, valueNumber: number = 0) {
     if (Number.isNaN(+e.target.value)) {
       return;
     }
@@ -32,19 +31,9 @@ export default function Inputs({
     console.log(val);
 
     if (mainParams[name] instanceof Array) {
-      if (soleNumber !== undefined) {
-        const tempArr = mainParams[name];
-        if (soleNumber === 0) {
-          tempArr[valueNumber] = [val, tempArr[valueNumber]?.at(1)];
-        } else {
-          tempArr[valueNumber] = [tempArr[valueNumber]?.at(0), val];
-        }
-        temp[name] = tempArr;
-      } else {
-        const tempArr = mainParams[name];
-        tempArr[valueNumber] = val;
-        temp[name] = tempArr;
-      }
+      const tempArr = mainParams[name];
+      tempArr[valueNumber] = val;
+      temp[name] = tempArr;
     } else {
       temp[name] = val;
     }
@@ -93,8 +82,6 @@ export default function Inputs({
         );
       case 'layerThickness':
         return <ArrayInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} />;
-      case 'sole':
-        return <Array2dInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} />;
       case 'shiftCount':
       case 'NX':
       case 'NY':

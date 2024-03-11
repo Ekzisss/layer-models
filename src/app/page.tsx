@@ -17,13 +17,7 @@ import axios from 'axios';
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-import bg1 from '../img/bg2.jpg';
-import bg2 from '../img/dark.png';
-import bg3 from '../img/cyber.jpg';
-
 const gradient = ['#fde725', '#b5de2b', '#6ece58', '#35b779', '#1f9e89', '#26828e', '#31688e', '#3e4989', '#482878', '#440154'];
-
-const bgs = [bg1, bg2, bg3];
 
 function colorPicker(palette: string[], totalNumber: number) {
   const result: string[] = [];
@@ -64,7 +58,6 @@ export default function Home() {
     scatterMaxValue: 5,
     scatterPeriod: 2,
     scatterAmount: [0, 0, 0],
-    sole: [],
     Y: [
       [10, 20],
       [10, 20],
@@ -174,12 +167,7 @@ export default function Home() {
 
   return (
     <div className={styles.base}>
-      <div
-        style={{
-          background: `url(${bgs[currentTheme % 3].src}) center/cover no-repeat`,
-        }}
-        className={styles.bg}
-      >
+      <div className={styles.bg}>
         <div className={`${styles.main} ${styles.main_decoration}`}>
           <div className={styles.leftSide}>
             <div style={opacityMode ? { opacity: 1 } : {}} className={styles.leftSide__up}></div>
@@ -230,14 +218,6 @@ export default function Home() {
           </div>
           <div className={styles.rightSide}>
             <div className={`${styles.rightSide__up} ${styles.rightSide__up_real} ${styles.real}`}>
-              <div className={styles.circle}>
-                <p>?</p>
-              </div>
-              <div className={styles.ellipse}>
-                <p>
-                  <span className={styles.languageActive}>ru</span> / <span>en</span>
-                </p>
-              </div>
               <div onClick={() => setOpacityMode(!opacityMode)} className={styles.circle}>
                 <OpacityIcon className={styles.darkMode}></OpacityIcon>
               </div>
