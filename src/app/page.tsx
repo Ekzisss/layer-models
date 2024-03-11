@@ -17,29 +17,13 @@ import axios from 'axios';
 
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
-// types
-// 0 - textbox
-// 1 - checkbox
-// 2 - array
-// 3 - array of array1
-// 4 - slider
-// 5 - choice
-// 6 - 3 choice
-// 7 - 2 sliders
-// 8 - hidden illustration
+import bg1 from '../img/bg2.jpg';
+import bg2 from '../img/dark.png';
+import bg3 from '../img/cyber.jpg';
 
-const gradient = [
-  '#fde725',
-  '#b5de2b',
-  '#6ece58',
-  '#35b779',
-  '#1f9e89',
-  '#26828e',
-  '#31688e',
-  '#3e4989',
-  '#482878',
-  '#440154',
-];
+const gradient = ['#fde725', '#b5de2b', '#6ece58', '#35b779', '#1f9e89', '#26828e', '#31688e', '#3e4989', '#482878', '#440154'];
+
+const bgs = [bg1, bg2, bg3];
 
 function colorPicker(palette: string[], totalNumber: number) {
   const result: string[] = [];
@@ -79,17 +63,39 @@ export default function Home() {
     layerThickness: [],
     scatterMaxValue: 5,
     scatterPeriod: 2,
-    scatterAmount: [15, 0, 0],
+    scatterAmount: [0, 0, 0],
     sole: [],
-    Y: [30, 30],
-    L: [-10, 10],
-    shiftForce: [5, 15],
-    side: 0,
-    shiftType: 0,
+    Y: [
+      [10, 20],
+      [10, 20],
+      [10, 20],
+      [10, 20],
+      [10, 20],
+    ],
+    L: [
+      [10, 30],
+      [10, 30],
+      [10, 30],
+      [10, 30],
+      [10, 30],
+    ],
+    shiftForce: [
+      [5, 15],
+      [5, 15],
+      [5, 15],
+      [5, 15],
+      [5, 15],
+    ],
+    side: [true, true, true, true, true],
+    shiftType: [false, false, false, false, false],
     shiftCount: 1,
   });
 
   // const chartColor = colorPicker(gradient, mainParams.layerCount);
+  useEffect(() => {
+    console.log(mainParams);
+    updateGraph();
+  }, [mainParams]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -100,8 +106,14 @@ export default function Home() {
 
   async function downloadModels() {
     if (!HOST) return;
-    const response = await axios.post(HOST, mainParams, {
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    const fastParams = { ...mainParams };
+    fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
+    fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
+    fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
+    fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
+    fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+    const response = await axios.post(HOST, fastParams, {
+      headers: { 'Content-Type': 'application/json' },
     });
     const receivedData = response.data.result;
 
@@ -122,6 +134,13 @@ export default function Home() {
       if (!HOST) return;
       const fastParams = { ...mainParams };
       fastParams.N = 1;
+      fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
+      fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
+      fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
+      fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
+      fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+      if (fastParams.scatterAmount.length !== fastParams.layerCount || fastParams.scatterAmount.includes(undefined))
+        fastParams.scatterAmount = [];
       const response = await axios.post(HOST, fastParams, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -131,7 +150,7 @@ export default function Home() {
 
       for (let i = 0; i < mainParams.layerCount; i++) {
         dataPerLayer.push(
-          receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - 4)
+          receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - mainParams.shiftCount * 2)
         );
       }
 
@@ -142,11 +161,9 @@ export default function Home() {
       for (let i = 1; i < dataPerLayer.length; i++) {
         dataPerLayer[i].map((item: any, index: number) => {
           data[index][`layer ${i}`] = item - dataPerLayer[i - 1][index];
-          // return { value: item };
         });
       }
 
-      // const chartColor = colorPicker(gradient, mainParams.layerCount);
       setChartColors(colorPicker(gradient, mainParams.layerCount));
 
       setDataForChart(data);
@@ -155,42 +172,22 @@ export default function Home() {
     }
   }
 
-  function getAllValues(arr: any[], index: number, countTo: number = 0) {
-    let sum = 0;
-    for (let i = 0; i < countTo; i++) {
-      sum += arr[i][index];
-    }
-    return sum;
-  }
-
   return (
     <div className={styles.base}>
       <div
         style={{
-          background: `url(${themes[currentTheme % themes.length].bg}) center/cover no-repeat`,
+          background: `url(${bgs[currentTheme % 3].src}) center/cover no-repeat`,
         }}
         className={styles.bg}
       >
         <div className={`${styles.main} ${styles.main_decoration}`}>
           <div className={styles.leftSide}>
-            <div
-              style={opacityMode ? { opacity: 1 } : {}}
-              className={styles.leftSide__up}
-            ></div>
-            <div
-              style={opacityMode ? { opacity: 1 } : {}}
-              className={styles.leftSide__down}
-            ></div>
+            <div style={opacityMode ? { opacity: 1 } : {}} className={styles.leftSide__up}></div>
+            <div style={opacityMode ? { opacity: 1 } : {}} className={styles.leftSide__down}></div>
           </div>
           <div className={styles.rightSide}>
-            <div
-              style={opacityMode ? { opacity: 1 } : {}}
-              className={styles.rightSide__up}
-            ></div>
-            <div
-              style={opacityMode ? { opacity: 0 } : {}}
-              className={styles.rightSide__down}
-            ></div>
+            <div style={opacityMode ? { opacity: 1 } : {}} className={styles.rightSide__up}></div>
+            <div style={opacityMode ? { opacity: 0 } : {}} className={styles.rightSide__down}></div>
           </div>
         </div>
 
@@ -202,28 +199,33 @@ export default function Home() {
                 {params.map((item, index) => (
                   <ParamsField
                     key={index}
-                    sectionName={item.sectionName}
+                    sectionName={item.sectionName !== 'Генерация разреза' ? item.sectionName : 'Генерация разреза №1'}
                     params={item.params}
                     colorForSlider={colorForSlider}
                     mainParams={mainParams}
                     setMainParams={setMainParams}
-                    onChange={updateGraph}
                   ></ParamsField>
                 ))}
+                {Array(mainParams.shiftCount - 1)
+                  .fill(0)
+                  .map((_, index) => (
+                    <ParamsField
+                      key={index}
+                      sectionName={`${params[2].sectionName} №${index + 2}`}
+                      params={params[2].params}
+                      colorForSlider={colorForSlider}
+                      mainParams={mainParams}
+                      setMainParams={setMainParams}
+                      shiftNumber={index + 2}
+                    ></ParamsField>
+                  ))}
               </section>
             </div>
             <div className={`${styles.leftSide__down} ${styles.leftSide__down_real} ${styles.real}`}>
-              <button
-                onClick={downloadModels}
-                className={styles.leftSide__down__submit}
-              >
+              <button onClick={downloadModels} className={styles.leftSide__down__submit}>
                 Скачать модели
               </button>
-              <a
-                id="download"
-                target="_blank"
-                rel="noreferrer"
-              ></a>
+              <a id="download" target="_blank" rel="noreferrer"></a>
             </div>
           </div>
           <div className={styles.rightSide}>
@@ -236,32 +238,17 @@ export default function Home() {
                   <span className={styles.languageActive}>ru</span> / <span>en</span>
                 </p>
               </div>
-              <div
-                onClick={() => setOpacityMode(!opacityMode)}
-                className={styles.circle}
-              >
+              <div onClick={() => setOpacityMode(!opacityMode)} className={styles.circle}>
                 <OpacityIcon className={styles.darkMode}></OpacityIcon>
               </div>
-              <div
-                onClick={() => setCurrentTheme(currentTheme + 1)}
-                className={styles.circle}
-              >
+              <div onClick={() => setCurrentTheme(currentTheme + 1)} className={styles.circle}>
                 <PaletteIcon className={styles.darkMode}></PaletteIcon>
               </div>
             </div>
             <div className={`${styles.rightSide__down} ${styles.rightSide__down_real}  ${styles.real}`}>
-              <div
-                style={opacityMode ? { backgroundColor: 'rgba(68, 68, 68, 1)' } : {}}
-                className={styles.display}
-              >
-                <ResponsiveContainer
-                  width="100%"
-                  aspect={1}
-                >
-                  <AreaChart
-                    data={dataForChart}
-                    margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
-                  >
+              <div style={opacityMode ? { backgroundColor: 'rgba(68, 68, 68, 1)' } : {}} className={styles.display}>
+                <ResponsiveContainer width="100%" aspect={1}>
+                  <AreaChart data={dataForChart} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                     <Tooltip />
                     {dataForChart[0] &&
                       Object.keys(dataForChart[0]).map((key, index) => (
@@ -273,20 +260,10 @@ export default function Home() {
                           stackId="1"
                           animationDuration={500}
                           type="monotone"
-                          // type="linear"
                         ></Area>
                       ))}
-                    <XAxis
-                      stroke="#ccc"
-                      // dataKey="name"
-                      orientation="top"
-                    />
-                    <YAxis
-                      stroke="#ccc"
-                      markerHeight={20}
-                      reversed={true}
-                      domain={[0, mainParams.NY]}
-                    />
+                    <XAxis stroke="#ccc" orientation="top" />
+                    <YAxis stroke="#ccc" markerHeight={20} reversed={true} domain={[0, mainParams.NY]} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
