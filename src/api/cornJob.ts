@@ -4,7 +4,7 @@
 
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export default async function GET() {
   // Замените URL на URL вашего сервера
   try {
     const response = await fetch('https://layer-backend.onrender.com');
