@@ -28,5 +28,5 @@ export default async function handler(request: NextApiRequest, response: NextApi
   const data = await result.json();
   console.log(data);
 
-  return response.json({ datetime: data.datetime });
+  return response.json({});
 }
