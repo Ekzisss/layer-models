@@ -9,8 +9,6 @@ import params from '../../public/params.json';
 import themes from '../../public/themes.json';
 import { useState, useEffect } from 'react';
 
-const montserrat = Montserrat({ subsets: ['latin'] });
-
 import PaletteIcon from '@mui/icons-material/Palette';
 import OpacityIcon from '@mui/icons-material/Opacity';
 import axios from 'axios';
@@ -84,11 +82,55 @@ export default function Home() {
     shiftCount: 1,
   });
 
+  console.log(mainParams);
+
   // const chartColor = colorPicker(gradient, mainParams.layerCount);
   useEffect(() => {
-    console.log(mainParams);
+    async function updateGraph() {
+      try {
+        if (!HOST) return;
+        const fastParams = { ...mainParams };
+        fastParams.N = 1;
+        fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
+        fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
+        fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
+        fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
+        fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+        // if (fastParams.scatterAmount.length !== fastParams.layerCount || fastParams.scatterAmount.includes(undefined))
+        //   fastParams.scatterAmount = [];
+        const response = await axios.post(HOST, fastParams, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const receivedData = response.data.result[0];
+
+        const dataPerLayer: any[] = [];
+
+        for (let i = 0; i < mainParams.layerCount; i++) {
+          dataPerLayer.push(
+            receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - mainParams.shiftCount * 2)
+          );
+        }
+
+        const data = dataPerLayer[0].map((item: any, index: number) => {
+          return { 'layer 0': item };
+        });
+
+        for (let i = 1; i < dataPerLayer.length; i++) {
+          dataPerLayer[i].map((item: any, index: number) => {
+            data[index][`layer ${i}`] = item - dataPerLayer[i - 1][index];
+          });
+        }
+
+        setChartColors(colorPicker(gradient, mainParams.layerCount));
+
+        setDataForChart(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     updateGraph();
-  }, [mainParams]);
+  }, [mainParams, HOST]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -119,49 +161,6 @@ export default function Home() {
       link.setAttribute('download', 'Models');
       link.setAttribute('href', encodedUri);
       link.click();
-    }
-  }
-
-  async function updateGraph() {
-    try {
-      if (!HOST) return;
-      const fastParams = { ...mainParams };
-      fastParams.N = 1;
-      fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
-      fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
-      fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
-      fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
-      fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
-      if (fastParams.scatterAmount.length !== fastParams.layerCount || fastParams.scatterAmount.includes(undefined))
-        fastParams.scatterAmount = [];
-      const response = await axios.post(HOST, fastParams, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const receivedData = response.data.result[0];
-
-      const dataPerLayer: any[] = [];
-
-      for (let i = 0; i < mainParams.layerCount; i++) {
-        dataPerLayer.push(
-          receivedData.slice(i * mainParams.NX, -(mainParams.NX * (mainParams.layerCount - 1 - i)) - mainParams.shiftCount * 2)
-        );
-      }
-
-      const data = dataPerLayer[0].map((item: any, index: number) => {
-        return { 'layer 0': item };
-      });
-
-      for (let i = 1; i < dataPerLayer.length; i++) {
-        dataPerLayer[i].map((item: any, index: number) => {
-          data[index][`layer ${i}`] = item - dataPerLayer[i - 1][index];
-        });
-      }
-
-      setChartColors(colorPicker(gradient, mainParams.layerCount));
-
-      setDataForChart(data);
-    } catch (error) {
-      console.log(error);
     }
   }
 

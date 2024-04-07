@@ -27,8 +27,8 @@ export default function Inputs({
     const val: number = +e.target.value;
 
     const temp: any = {};
-    console.log(name);
-    console.log(val);
+    // console.log(name);
+    // console.log(val);
 
     if (mainParams[name] instanceof Array) {
       const tempArr = mainParams[name];
