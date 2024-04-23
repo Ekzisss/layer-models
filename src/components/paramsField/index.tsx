@@ -1,12 +1,10 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './style.module.scss';
 import { Montserrat } from 'next/font/google';
-import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
 
-import { styled } from '@mui/material/styles';
 import Inputs from '../inputs';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
@@ -23,7 +21,6 @@ interface Types {
 export default function ParamsField({
   sectionName,
   params,
-  colorForSlider,
   mainParams,
   setMainParams,
   shiftNumber = 1,
@@ -35,47 +32,23 @@ export default function ParamsField({
   setMainParams: React.Dispatch<any>;
   shiftNumber?: Number;
 }) {
-  const [sliderKey, setSliderKey] = React.useState('aaa');
-
-  // useEffect(() => {
-  //   setSliderKey((sliderKey) => sliderKey + 'b');
-  //   SliderStyle = styled(Slider)({
-  //     color: colorForSlider,
-  //     '& .MuiSlider-thumb': {
-  //       height: 15,
-  //       width: 15,
-  //       backgroundColor: '#fff',
-  //       border: '2px solid currentColor',
-  //       '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
-  //         boxShadow: 'inherit',
-  //       },
-  //       '&:before': {
-  //         display: 'none',
-  //       },
-  //       '&:after': {
-  //         display: 'none',
-  //       },
-  //     },
-  //   });
-  // }, [colorForSlider]);
-
-  // for (const item in mainParams) {
-  //   const borders = params.find((o) => o.name === item)?.borders;
-  //   if (!borders) {
-  //     getUpdatingBorders(item);
-  //     continue;
-  //   }
-  //   if (mainParams[item] < borders[0]) {
-  //     const temp: any = {};
-  //     temp[item] = borders[0];
-  //     setMainParams({ ...mainParams, ...temp });
-  //   }
-  //   if (mainParams[item] > borders[1]) {
-  //     const temp: any = {};
-  //     temp[item] = borders[1];
-  //     setMainParams({ ...mainParams, ...temp });
-  //   }
-  // }
+  for (const item in mainParams) {
+    const borders = params.find((o) => o.name === item)?.borders;
+    if (!borders) {
+      getUpdatingBorders(item);
+      continue;
+    }
+    if (mainParams[item] < borders[0]) {
+      const temp: any = {};
+      temp[item] = borders[0];
+      setMainParams({ ...mainParams, ...temp });
+    }
+    if (mainParams[item] > borders[1]) {
+      const temp: any = {};
+      temp[item] = borders[1];
+      setMainParams({ ...mainParams, ...temp });
+    }
+  }
 
   function getUpdatingBorders(name: string) {
     if (name === 'L') {
@@ -145,12 +118,7 @@ export default function ParamsField({
       <h2 className={`${montserrat.className} ${styles.params__title}`}>{sectionName}</h2>
       <ul className={styles.params__section}>
         {params.map((item, index) => (
-          <Stack
-            direction="row"
-            gap="20px"
-            alignItems="center"
-            key={`${item.name} ${index}`}
-          >
+          <Stack direction="row" gap="20px" alignItems="center" key={`${item.name} ${index}`}>
             <Item
               width="160px"
               flexShrink={0}
@@ -162,11 +130,7 @@ export default function ParamsField({
               }}
               className={styles.description__parent}
             >
-              <div
-                id={item.name}
-                style={{ opacity: 0 }}
-                className={styles.description}
-              >
+              <div id={item.name} style={{ opacity: 0 }} className={styles.description}>
                 {item.desc}
               </div>
               <p>{item.name}</p>

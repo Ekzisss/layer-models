@@ -1,8 +1,6 @@
 'use client';
-import Image from 'next/image';
 import styles from './page.module.scss';
 import './vars.css';
-import { Montserrat } from 'next/font/google';
 import ParamsField from '../components/paramsField';
 import './globals.scss';
 import params from '../../public/params.json';
@@ -82,9 +80,6 @@ export default function Home() {
     shiftCount: 1,
   });
 
-  console.log(mainParams);
-
-  // const chartColor = colorPicker(gradient, mainParams.layerCount);
   useEffect(() => {
     async function updateGraph() {
       try {
@@ -96,8 +91,6 @@ export default function Home() {
         fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
         fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
         fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
-        // if (fastParams.scatterAmount.length !== fastParams.layerCount || fastParams.scatterAmount.includes(undefined))
-        //   fastParams.scatterAmount = [];
         const response = await axios.post(HOST, fastParams, {
           headers: { 'Content-Type': 'application/json' },
         });
@@ -111,7 +104,7 @@ export default function Home() {
           );
         }
 
-        const data = dataPerLayer[0].map((item: any, index: number) => {
+        const data = dataPerLayer[0].map((item: any, _: number) => {
           return { 'layer 0': item };
         });
 
