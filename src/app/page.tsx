@@ -157,6 +157,8 @@ export default function Home() {
     }
   }
 
+  console.log(mainParams);
+
   return (
     <div className={styles.base}>
       <div className={styles.bg}>

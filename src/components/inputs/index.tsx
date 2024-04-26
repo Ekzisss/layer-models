@@ -24,7 +24,13 @@ export default function Inputs({
       return;
     }
 
-    const val: number = +e.target.value;
+    let val: number = +e.target.value;
+
+    const min = params.find((o: any) => o.name === name)?.borders?.at(0);
+    const max = params.find((o: any) => o.name === name)?.borders?.at(1);
+
+    if (min > val) val = min;
+    if (max < val) val = max;
 
     const temp: any = {};
 

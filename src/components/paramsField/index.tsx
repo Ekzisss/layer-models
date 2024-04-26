@@ -12,7 +12,6 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 interface Types {
   name: string;
   desc: string;
-  type: number;
   default: any;
   borders?: number[];
   disabled?: number[];

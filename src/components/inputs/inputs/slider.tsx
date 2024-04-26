@@ -34,12 +34,10 @@ export default function SliderInput({
   onChangingParams: Function;
   params: any;
 }) {
+  console.log(params.find((o: any) => o.name === name)?.borders?.at(0) || (name == 'center' && 0) || 20);
   return (
     <div className={styles.inputSliderContainer}>
-      <Item
-        height={'100%'}
-        display={'flex'}
-      >
+      <Item height={'100%'} display={'flex'}>
         <input
           className={styles.inputWithSlider}
           type="text"
@@ -47,6 +45,8 @@ export default function SliderInput({
           id=""
           value={mainParams[name]}
           onChange={(e: any) => onChangingParams(e, name)}
+          min={params.find((o: any) => o.name === name)?.borders?.at(0) || (name == 'center' && 0) || 20}
+          max={params.find((o: any) => o.name === name)?.borders?.at(1) || (name == 'center' && mainParams.NX) || 45}
           disabled={
             params.find((o: any) => o.name === name)?.disabled?.at(0) === mainParams.generationType ||
             params.find((o: any) => o.name === name)?.disabled?.at(1) === mainParams.generationType ||
@@ -59,11 +59,7 @@ export default function SliderInput({
           defaultValue={params.find((o: any) => o.name === name)?.default || 0}
           valueLabelDisplay="off"
           min={params.find((o: any) => o.name === name)?.borders?.at(0) || (name == 'center' && 0) || 20}
-          max={
-            params.find((o: any) => o.name === name)?.borders?.at(1) ||
-            (name == 'center' && mainParams.NX) ||
-            45
-          }
+          max={params.find((o: any) => o.name === name)?.borders?.at(1) || (name == 'center' && mainParams.NX) || 45}
           value={mainParams || typeof mainParams[name] === 'number' ? mainParams[name] : 0}
           onChange={(e: any) => onChangingParams(e, name)}
           disabled={
