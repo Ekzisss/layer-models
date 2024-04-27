@@ -86,11 +86,11 @@ export default function Home() {
         if (!HOST) return;
         const fastParams = { ...mainParams };
         fastParams.N = 1;
-        fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
-        fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
-        fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
-        fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
-        fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+        fastParams.Y = fastParams.Y.slice(0, fastParams.shiftCount);
+        fastParams.L = fastParams.L.slice(0, fastParams.shiftCount);
+        fastParams.shiftForce = fastParams.shiftForce.slice(0, fastParams.shiftCount);
+        fastParams.side = fastParams.side.slice(0, fastParams.shiftCount);
+        fastParams.shiftType = fastParams.shiftType.slice(0, fastParams.shiftCount);
         const response = await axios.post(HOST, fastParams, {
           headers: { 'Content-Type': 'application/json' },
         });
@@ -107,7 +107,6 @@ export default function Home() {
         const data = dataPerLayer[0].map((item: any, _: number) => {
           return { 'layer 0': item };
         });
-
         for (let i = 1; i < dataPerLayer.length; i++) {
           dataPerLayer[i].map((item: any, index: number) => {
             data[index][`layer ${i}`] = item - dataPerLayer[i - 1][index];
@@ -115,6 +114,9 @@ export default function Home() {
         }
 
         setChartColors(colorPicker(gradient, mainParams.layerCount));
+
+        console.log(receivedData);
+        console.log(data);
 
         setDataForChart(data);
       } catch (error) {
@@ -135,11 +137,11 @@ export default function Home() {
   async function downloadModels() {
     if (!HOST) return;
     const fastParams = { ...mainParams };
-    fastParams.Y = fastParams.Y.slice(fastParams.shiftCount - 1);
-    fastParams.L = fastParams.L.slice(fastParams.shiftCount - 1);
-    fastParams.shiftForce = fastParams.shiftForce.slice(fastParams.shiftCount - 1);
-    fastParams.side = fastParams.side.slice(fastParams.shiftCount - 1);
-    fastParams.shiftType = fastParams.shiftType.slice(fastParams.shiftCount - 1);
+    fastParams.Y = fastParams.Y.slice(0, fastParams.shiftCount);
+    fastParams.L = fastParams.L.slice(0, fastParams.shiftCount);
+    fastParams.shiftForce = fastParams.shiftForce.slice(0, fastParams.shiftCount);
+    fastParams.side = fastParams.side.slice(0, fastParams.shiftCount);
+    fastParams.shiftType = fastParams.shiftType.slice(0, fastParams.shiftCount);
     const response = await axios.post(HOST, fastParams, {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -147,9 +149,7 @@ export default function Home() {
 
     let csvContent = 'data:text/csv;charset=utf-8,' + receivedData.map((e: any) => e.join(',')).join('\n');
     let encodedUri = encodeURI(csvContent);
-
     const link = document.getElementById('download');
-
     if (link) {
       link.setAttribute('download', 'Models');
       link.setAttribute('href', encodedUri);

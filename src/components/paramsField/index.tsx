@@ -34,7 +34,6 @@ export default function ParamsField({
   for (const item in mainParams) {
     const borders = params.find((o) => o.name === item)?.borders;
     if (!borders) {
-      getUpdatingBorders(item);
       continue;
     }
     if (mainParams[item] < borders[0]) {
@@ -46,69 +45,6 @@ export default function ParamsField({
       const temp: any = {};
       temp[item] = borders[1];
       setMainParams({ ...mainParams, ...temp });
-    }
-  }
-
-  function getUpdatingBorders(name: string) {
-    if (name === 'L') {
-      if ((!mainParams.side && mainParams.shiftType) || (mainParams.side && !mainParams.shiftType)) {
-        if (mainParams[name][0] < 1) {
-          mainParams[name][0] = 1;
-        }
-        if (mainParams[name][1] > 45) {
-          mainParams[name][1] = 45;
-        }
-        if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < 1) {
-          mainParams[name][1] = mainParams[name][0];
-        }
-        if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > 45) {
-          mainParams[name][0] = mainParams[name][1];
-        }
-      } else {
-        if (mainParams[name][0] < -45) {
-          mainParams[name][0] = -45;
-        }
-        if (mainParams[name][1] > -1) {
-          mainParams[name][1] = -1;
-        }
-        if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < -45) {
-          mainParams[name][1] = mainParams[name][0];
-        }
-        if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > -1) {
-          mainParams[name][0] = mainParams[name][1];
-        }
-      }
-    }
-    if (name === 'Y') {
-      if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < 1) {
-        mainParams[name][1] = mainParams[name][0];
-      }
-      if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > mainParams.NX) {
-        mainParams[name][0] = mainParams[name][1];
-      }
-
-      if (mainParams[name][1] > mainParams.NX) {
-        mainParams[name][1] = mainParams.NX;
-      }
-      if (mainParams[name][0] < 1) {
-        mainParams[name][0] = 1;
-      }
-    }
-
-    if (name === 'shiftForce') {
-      if (mainParams[name][1] < mainParams[name][0] && mainParams[name][1] < 1) {
-        mainParams[name][1] = mainParams[name][0];
-      }
-      if (mainParams[name][0] > mainParams[name][1] && mainParams[name][0] > mainParams.NY) {
-        mainParams[name][0] = mainParams[name][1];
-      }
-
-      if (mainParams[name][1] > mainParams.NY) {
-        mainParams[name][1] = mainParams.NY;
-      }
-      if (mainParams[name][0] < 1) {
-        mainParams[name][0] = 1;
-      }
     }
   }
 
