@@ -20,8 +20,8 @@
     "sectionName": "Генерация базы",
     "params": [
       { "name": "generationType", "desc": "Тип генерации моделей", "default": 0 },
-      { "name": "NX", "desc": "Количество пиктов моделей", "default": 30, "borders": [10, 100] },
-      { "name": "NY", "desc": "Глубина моделей", "default": 60, "borders": [10, 100] },
+      { "name": "NX", "desc": "Количество пиктов моделей", "default": 30, "borders": [10, 150] },
+      { "name": "NY", "desc": "Глубина моделей", "default": 60, "borders": [10, 150] },
       { "name": "layerCount", "desc": "Количество слоёв", "default": 3, "borders": [2, 10] },
       {
         "name": "layerThickness",
