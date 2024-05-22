@@ -106,11 +106,11 @@ export default function Home() {
         }
 
         const data = dataPerLayer[0].map((item: any, _: number) => {
-          return { 'Слой 0': item };
+          return { 'Слой 1': item };
         });
         for (let i = 1; i < dataPerLayer.length; i++) {
           dataPerLayer[i].map((item: any, index: number) => {
-            data[index][`Слой ${i}`] = item - dataPerLayer[i - 1][index];
+            data[index][`Слой ${i+1}`] = item - dataPerLayer[i - 1][index];
           });
         }
 
