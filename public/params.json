@@ -9,6 +9,12 @@
         "borders": [1, 10000]
       },
       {
+        "name": "metricPerCell",
+        "desc": "Сколько будет занимать 1 ячейка в выходных данных",
+        "default": 1,
+        "borders": [0.0001, 1000]
+      },
+      {
         "name": "withoutShift",
         "desc": "Если значение True - то модель сгенерируется без разлома",
         "default": "False"

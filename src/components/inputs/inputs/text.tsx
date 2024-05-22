@@ -16,7 +16,7 @@ export default function TextInput({
       type="text"
       name=""
       id=""
-      value={mainParams.N}
+      value={mainParams[name]}
       onChange={(e) => onChangingParams(e, name)}
     />
   );

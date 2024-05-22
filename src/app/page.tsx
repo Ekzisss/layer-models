@@ -45,6 +45,7 @@ export default function Home() {
 
   const [mainParams, setMainParams] = useState<any>({
     N: 10,
+    metricPerCell: 1,
     withoutShift: false,
     generationType: 0,
     NX: 60,
@@ -105,11 +106,11 @@ export default function Home() {
         }
 
         const data = dataPerLayer[0].map((item: any, _: number) => {
-          return { 'layer 0': item };
+          return { 'Слой 0': item };
         });
         for (let i = 1; i < dataPerLayer.length; i++) {
           dataPerLayer[i].map((item: any, index: number) => {
-            data[index][`layer ${i}`] = item - dataPerLayer[i - 1][index];
+            data[index][`Слой ${i}`] = item - dataPerLayer[i - 1][index];
           });
         }
 
@@ -237,7 +238,7 @@ export default function Home() {
                         ></Area>
                       ))}
                     <XAxis stroke="#ccc" orientation="top" />
-                    <YAxis stroke="#ccc" markerHeight={20} reversed={true} domain={[0, mainParams.NY]} />
+                    <YAxis stroke="#ccc" markerHeight={20} reversed={true} domain={[0, mainParams.NY* mainParams.metricPerCell]} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

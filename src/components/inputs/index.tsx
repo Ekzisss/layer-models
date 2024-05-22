@@ -69,7 +69,7 @@ export default function Inputs({
 
   function switchResult(name: any) {
     switch (name) {
-      case 'N':
+      case 'N': case 'metricPerCell':
         return <TextInput mainParams={mainParams} name={name} onChangingParams={onChangingParams} />;
       case 'withoutShift':
       case 'side':
