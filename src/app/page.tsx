@@ -116,8 +116,8 @@ export default function Home() {
 
         setChartColors(colorPicker(gradient, mainParams.layerCount));
 
-        console.log(receivedData);
-        console.log(data);
+        //console.log(receivedData);
+        //console.log(data);
 
         setDataForChart(data);
       } catch (error) {
@@ -158,7 +158,7 @@ export default function Home() {
     }
   }
 
-  console.log(mainParams);
+  //console.log(mainParams);
 
   return (
     <div className={styles.base}>
